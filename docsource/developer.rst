@@ -14,6 +14,7 @@ Developer
    systemRequirements
    installation
    configurationDetails
+   appDevelopment
    maintenance
    knownIssues
    todos

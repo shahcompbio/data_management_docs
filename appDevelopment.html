@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>4.11. Known Issues &#8212; Data Management 0.0.1 documentation</title>
+    <title>4.9. Isabl Application Development &#8212; Data Management 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -14,8 +14,8 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="4.12. TODOs" href="todos.html" />
-    <link rel="prev" title="4.10. Maintenance" href="maintenance.html" />
+    <link rel="next" title="4.10. Maintenance" href="maintenance.html" />
+    <link rel="prev" title="4.8. Configuration Details" href="configurationDetails.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -32,8 +32,20 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="known-issues">
-<h1><span class="section-number">4.11. </span>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="isabl-application-development">
+<h1><span class="section-number">4.9. </span>Isabl Application Development<a class="headerlink" href="#isabl-application-development" title="Permalink to this headline">¶</a></h1>
+<p>Things to keep in mind when developing apps -</p>
+<p>Data is imported into the experiments directory of the data lake. This directory has group read permissions (drwxr-x—). i.e. Only admins can import data into the data lake. Developers who write data importers should not attempt to alter the umask of the experiment directory to include group write permissions.</p>
+<p>Applications can write results to the analysis directory that isabl creates for the application. Applications must only write to this directory.</p>
+<p>By design, isabl enforces these file permissions</p>
+<blockquote>
+<div><div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">/data-lake-root/ (not writable)</span>
+<span class="na">/data-lake-root/analyses/ (not writable)</span>
+<span class="na">/data-lake-root/analyses/00/ (not writable)</span>
+<span class="na">/data-lake-root/analyses/00/01/ (this has to be writable by the group)</span>
+</pre></div>
+</div>
+</div></blockquote>
 </div>
 
 
@@ -67,9 +79,9 @@
 <li class="toctree-l2"><a class="reference internal" href="systemRequirements.html">4.6. System Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html">4.7. Installation Instructions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configurationDetails.html">4.8. Configuration Details</a></li>
-<li class="toctree-l2"><a class="reference internal" href="appDevelopment.html">4.9. Isabl Application Development</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.9. Isabl Application Development</a></li>
 <li class="toctree-l2"><a class="reference internal" href="maintenance.html">4.10. Maintenance</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">4.11. Known Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="knownIssues.html">4.11. Known Issues</a></li>
 <li class="toctree-l2"><a class="reference internal" href="todos.html">4.12. TODOs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="references.html">4.13. References</a></li>
 <li class="toctree-l2"><a class="reference internal" href="keywords.html">4.14. Keywords</a></li>
@@ -83,8 +95,8 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="developer.html"><span class="section-number">4. </span>Developer</a><ul>
-      <li>Previous: <a href="maintenance.html" title="previous chapter"><span class="section-number">4.10. </span>Maintenance</a></li>
-      <li>Next: <a href="todos.html" title="next chapter"><span class="section-number">4.12. </span>TODOs</a></li>
+      <li>Previous: <a href="configurationDetails.html" title="previous chapter"><span class="section-number">4.8. </span>Configuration Details</a></li>
+      <li>Next: <a href="maintenance.html" title="next chapter"><span class="section-number">4.10. </span>Maintenance</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -119,7 +131,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="_sources/knownIssues.rst.txt"
+      <a href="_sources/appDevelopment.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
