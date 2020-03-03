@@ -1,2 +1,2 @@
-# datamanagement_docs
-Shah lab data management docs
+# data_management_docs
+Shah Lab data management documentation.
