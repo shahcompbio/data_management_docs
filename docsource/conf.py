@@ -19,7 +19,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'isabl_api'
+project = 'Data Management'
 copyright = '2019, Shah Lab, MSKCC'
 author = 'Arfath Pasha, Eli Havasov, Jamie Lim'
 
