@@ -1,0 +1,799 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>4.7. Installation Instructions &#8212; isabl_api 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4.8. Configuration Details" href="configurationDetails.html" />
+    <link rel="prev" title="4.6. System Requirements" href="systemRequirements.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="installation-instructions">
+<h1><span class="section-number">4.7. </span>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
+<p>All installation instructions are for Ubuntu 16.04.</p>
+<div class="section" id="server-development-deployment-api">
+<h2><span class="section-number">4.7.1. </span>Server Development Deployment (API)<a class="headerlink" href="#server-development-deployment-api" title="Permalink to this headline">¶</a></h2>
+<p>You may wish to make a local server deployment if you are interested in developing and testing isabl apps.</p>
+<ol class="arabic simple">
+<li><p>Set up the following dependencies:</p></li>
+</ol>
+<div class="line-block">
+<div class="line">a) python 3.6+ (<a class="reference external" href="http://ubuntuhandbook.org/index.php/2017/07/install-python-3-6-1-in-ubuntu-16-04-lts/">http://ubuntuhandbook.org/index.php/2017/07/install-python-3-6-1-in-ubuntu-16-04-lts/</a>),</div>
+<div class="line">(<a class="reference external" href="https://developers.redhat.com/blog/2018/08/13/install-python3-rhel/">https://developers.redhat.com/blog/2018/08/13/install-python3-rhel/</a>)</div>
+<div class="line"><br /></div>
+<div class="line">b) pip and virtual env (<a class="reference external" href="https://packaging.python.org/guides/installing-using-pip-and-virtualenv/">https://packaging.python.org/guides/installing-using-pip-and-virtualenv/</a>)</div>
+<div class="line"><br /></div>
+<div class="line">c) Docker (<a class="reference external" href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">https://docs.docker.com/install/linux/docker-ce/ubuntu/</a>)</div>
+<div class="line"><br /></div>
+<div class="line">d) Docker-compose (<a class="reference external" href="https://docs.docker.com/compose/install/">https://docs.docker.com/compose/install/</a>)</div>
+<div class="line"><br /></div>
+<div class="line">e) apt-get install git  (or yum install git)</div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Make a local storage directory for raw files.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir -p ~/isabl_storage
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Clone repo.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="o">[</span><span class="nb">cd</span> to a dir where the api is to be installed<span class="o">]</span>
+$ git clone https://github.com/shahcompbio/isabl_api.git
+$ git remote -v
+$ git remote add upstream git@github.com:isabl-io/api.git
+$ git remote -v
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>In docker-compose.yml, the volume for the django service should include path to data lake which for consistency should be the same as what clients will set as BASE_STORAGE_DIRECTORY in isabl_cli/settings.py. By default, this points to <cite>~/isabl_storage</cite>. Note: use an absolute path (and replace USER_NAME below with your username).</p></li>
+</ol>
+<p>For postgres, it is necessary to bind mount the host backups dir so backups can be easily accessed from outside of the container.</p>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">services:</span>
+  <span class="na">django:</span>
+    <span class="na">volumes:</span>
+      <span class="na">- .:/app</span>
+      <span class="na">- /Users/&lt;USER_NAME&gt;/isabl_storage:/Users/&lt;USER_NAME&gt;/isabl_storage</span>
+
+<span class="na">services:</span>
+  <span class="na">postgres:</span>
+    <span class="na">volumes:</span>
+      <span class="na">- local_postgres_data:/datadrive/db</span>
+      <span class="na">- ./backups:/backups</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>For mac, change <cite>psycopg2-binary==2.8.4</cite> to <cite>psycopg2-binary==2.8.5</cite> ./setup.json</p></li>
+<li><p>Update template UI by editing <cite>./example/templates/frontend.html</cite> and replacing the script tags the the tags below.</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span> <span class="n">src</span><span class="o">=</span><span class="s2">&quot;https://cdn.jsdelivr.net/npm/vue&quot;</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">script</span> <span class="n">src</span><span class="o">=</span><span class="s2">&quot;https://cdn.jsdelivr.net/npm/isabl-web@0.1.75&quot;</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>If you are deploying a dev server on a machine other than your laptop (localhost), add the IP or domain name of the hosting machine to ALLOWED_HOSTS in <cite>./example/settings.py</cite>.</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># replace</span>
+<span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">]</span>
+<span class="c1"># with</span>
+<span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1.2.3.4&quot;</span><span class="p">,</span> <span class="s2">&quot;my_vm_domain_name&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Also replace “localhost in the following files and locations</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ grep -R <span class="s2">&quot;localhost&quot;</span> .
+
+./example/views.py:            settings, <span class="s2">&quot;DJANGO_HOST&quot;</span>, <span class="s2">&quot;localhost:8000&quot;</span>
+./example/settings.py:EMAIL_HOST <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span>
+./example/settings.py:    <span class="nv">DJANGO_HOST</span> <span class="o">=</span> <span class="s2">&quot;localhost:&quot;</span> + PORT
+./example/settings.py:    <span class="nv">DJANGO_HOST</span> <span class="o">=</span> <span class="s2">&quot;localhost:8000&quot;</span>
+./isabl_api/integrations/drive.py:        <span class="nv">auth_host_name</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span>,
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>Build images and start server.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose build
+$ docker images
+$ docker-compose run --rm django python manage.py makemigrations
+$ docker-compose run django python manage.py migrate
+$ docker-compose run django python manage.py showmigrations
+$ docker-compose run --rm django python manage.py createsuperuser --email admin@shahlab.mskcc.org --username admin
+$ docker-compose run --rm --user root django pytest --ds example.settings --cov<span class="o">=</span>isabl_api
+$ docker-compose up
+</pre></div>
+</div>
+<ol class="arabic simple" start="9">
+<li><p>Open browser and log in to the admin UI at <a class="reference external" href="http://localhost:8000/admin/">http://localhost:8000/admin/</a>.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The trailing slash after <cite>admin</cite> is required.</p>
+</div>
+<ol class="arabic simple" start="10">
+<li><p>In admin UI,</p></li>
+</ol>
+<div class="line-block">
+<div class="line">a) navigate to the Clients section and create a new client object with no attributes. A client with id = 1 should be created if it does not already exist. This id is required by the isabl cli to distinguish itself from other isabl clients.</div>
+</div>
+<div class="line-block">
+<div class="line">b) navigate to the Center section and add a new Center “MSKCC IGO” with __IGO__ as acronym</div>
+</div>
+<div class="line-block">
+<div class="line">c) navigate to the Project section and add a new project “SPECTRUM TEST” (name doesn’t matter)</div>
+</div>
+<ol class="arabic simple" start="11">
+<li><p>See “Staging Deployment” section to learn how to seed the database with a copy of the production database.</p></li>
+</ol>
+</div>
+<div class="section" id="client-development-deployment-cli">
+<h2><span class="section-number">4.7.2. </span>Client Development Deployment (CLI)<a class="headerlink" href="#client-development-deployment-cli" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Clone isabl_cli and shahlab_apps repos.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> &lt;to a dir where cli and apps should be installed&gt;
+$ git clone https://github.com/shahcompbio/isabl_cli.git
+$ git clone https://github.com/shahcompbio/shahlab_apps.git
+$ virtualenv -p python3 venv
+$ <span class="nb">source</span> venv/bin/activate
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>change <cite>base_url</cite> in <cite>isabl_cli/api.py</cite> to point to server url.</p></li>
+</ol>
+<p>Replace,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span> <span class="o">=</span> <span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ISABL_API_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;http://0.0.0.0:8000/api/v1/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>with,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span> <span class="o">=</span> <span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ISABL_API_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;http://localhost:8000/api/v1/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>OR you may set an environment variable in your shell.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">ISABL_API_URL</span><span class="o">=</span><span class="s2">&quot;http://localhost:8000/api/v1/&quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>In isabl_cli/settings.py,</p></li>
+</ol>
+<p>replace,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ISABL_CLIENT_ID&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>with,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ISABL_CLIENT_ID&quot;</span><span class="p">)</span>
+<span class="n">client_id</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>OR, you may set an environment variable in your shell.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">ISABL_CLIENT_ID</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Note that the BASE_STORAGE_DIRECTORY in isabl_cli/settings.py points to ~/isabl_storage by default. This is where your raw files will be stored by isabl.</p></li>
+<li><p>Install dependencies. Notice apps and cli use the same virtual environment.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> isabl_cli
+$ python setup.py install
+$ <span class="nb">cd</span> ../shahlab_apps
+$ python setup.py install
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Create file <cite>~/.isabl/settings.json</cite> and add the following contents</p></li>
+</ol>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">{</span>
+  <span class="na">&quot;api_token&quot;: &quot;GET_TOKEN_FROM_ISABL_ADMIN_UI_TOKENS_SECTION&quot;,</span>
+  <span class="na">&quot;token&quot;: null</span>
+<span class="na">}</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>In isabl_cli/settings.py update _DEFAULTS map to include applications that have been registered on the server. For example,</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;INSTALLED_APPLICATIONS&quot;</span><span class="p">:</span> <span class="p">[</span>
+  <span class="s2">&quot;shahlab_apps.apps.hello_world.apps.HelloWorld&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;shahlab_apps.apps.scrna.apps.SCRNA&quot;</span><span class="p">,],</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>Running <cite>isabl</cite> now should bring up the help menu with apps-grch37 and apps-grch38 applications. This confirms that isabl_cli is able to communicate with isabl_api.</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ isabl
+      Usage: isabl [OPTIONS] COMMAND [ARGS]...
+
+        Run Isabl command line tools.
+
+      Options:
+        --version  Show the version and exit.
+        --help     Show this message and exit.
+
+      Commands:
+        apps-grch37              GRCh37 applications.
+        apps-grch38              GRCh38 applications.
+        get-bams                 Get storage directories, use `pattern` to match...
+        get-bed                  Get a BED file for a given Sequencing Tehcnique.
+        get-count                Get count of database instances.
+        get-data                 Get file paths for experiments sequencing data.
+        get-metadata             Retrieve metadata for multiple instances.
+        get-outdirs              Get analyses outdirs, use `pattern` to match...
+        get-paths                Get storage directories, use `pattern` to match...
+        get-reference            Get reference resource for an Assembly.
+        get-results              Get analyses results.
+        import-bedfiles          Register targets and baits bed_files in...
+        import-data              Find and import experiments data from many...
+        import-reference-data    Register reference data in the assembly&#39;s data...
+        import-reference-genome  Register an assembly reference genome.
+        login                    Login with isabl credentials.
+        merge-project-analyses   Merge analyses by project primary key.
+        patch-results            Update the results field of many analyses.
+        process-finished         Process and update finished analyses.
+</pre></div>
+</div>
+<ol class="arabic simple" start="9">
+<li><p>To execute unit tests, you need to have a local server running.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>DO NOT RUN UNIT TESTS AGAINST THE PRODUCTION SERVER!</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ../cli
+$ py.test tests/ --cov<span class="o">=</span>isabl_cli -s
+$ <span class="nb">cd</span> ../shahlab_apps
+$ py.test tests/ --cov<span class="o">=</span>isabl_shahlab_apps -s
+</pre></div>
+</div>
+<ol class="arabic simple" start="10">
+<li><p>To check the applications under each genome reference, type</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ isabl apps-grch37
+      Usage: isabl apps-grch37 <span class="o">[</span>OPTIONS<span class="o">]</span> COMMAND <span class="o">[</span>ARGS<span class="o">]</span>...
+
+        GRCh37 applications.
+
+      Options:
+        --help  Show this message and exit.
+
+      Commands:
+        helloworld-0.1.1.r1  A hello world app that demonstrates component level...
+</pre></div>
+</div>
+<p>This completes installation. To run an app, see the section on  <a class="reference external" href="ops.rst">Routine Operations</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ deactivate
+</pre></div>
+</div>
+</div>
+<div class="section" id="staging-deployment">
+<h2><span class="section-number">4.7.3. </span>Staging Deployment<a class="headerlink" href="#staging-deployment" title="Permalink to this headline">¶</a></h2>
+<p>The staging environment is used to,</p>
+<div class="line-block">
+<div class="line">1. verify compatibility of the application code with the existing database, and to</div>
+<div class="line"><br /></div>
+<div class="line">2. verify compatibility of the application code with the production environment.</div>
+</div>
+<p>The staging environment must be set up in exactly the same way as the production environment to ensure code compatibility with the production environment. The only exception to this is that unit tests must be executed in the staging environment for verification of code and database compatibility. See Development deployment for unit test execution.</p>
+<p>The following steps may be used to deploy the production database to a staging environment.</p>
+<div class="line-block">
+<div class="line">1. Turn off tls in compose/production/caddy/Caddyfile so http can be used instead of https</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tls off
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose -f production.yml build caddy
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">2. Set up postgres and import production dump</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose up -d postgres
+$ docker-compose <span class="nb">exec</span> postgres bash
+$ su - postgres
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">3. Export environment variables from production</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">POSTGRES_HOST</span><span class="o">=</span>&lt;FROM_PROD&gt;
+$ <span class="nb">export</span> <span class="nv">POSTGRES_PORT</span><span class="o">=</span>&lt;FROM_PROD&gt;
+$ <span class="nb">export</span> <span class="nv">POSTGRES_DB</span><span class="o">=</span>&lt;FROM_PROD&gt;
+$ <span class="nb">export</span> <span class="nv">POSTGRES_USER</span><span class="o">=</span>&lt;FROM_PROD&gt;
+$ <span class="nb">export</span> <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>&lt;FROM_PROD&gt;
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">4. Use command below to create a <cite>root</cite> user with superuser privileges and a $POSTGRES_USER from prod db with no extra privileges</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ createuser --interactive --pwprompt
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">5. Then create db with prod db name</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ createdb -O <span class="nv">$POSTGRES_USER</span> <span class="nv">$POSTGRES_DB</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">6. Verify roles and new database</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ psql
+postgres# <span class="se">\d</span>u  <span class="c1"># to list roles</span>
+postgres# <span class="se">\l</span>   <span class="c1"># to list database</span>
+postgres# <span class="se">\q</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">7. Load production db dump</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ gunzip -c /backups/&lt;file_name&gt; <span class="p">|</span> psql <span class="nv">$POSTGRES_DB</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">8. Verify load</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ psql
+postgres# <span class="se">\c</span> isabl_shahcompbio<span class="p">;</span>
+postgres# <span class="k">select</span> * from auth_user<span class="p">;</span>
+postgres# <span class="se">\q</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">9. Put prod credentials in .envs/.production/.postgres</div>
+</div>
+<div class="line-block">
+<div class="line">10. Start server and verify database contents through admin UI</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose down
+$ docker-compose -f production.yml up -d
+</pre></div>
+</div>
+</div>
+<div class="section" id="server-production-deployment-api">
+<h2><span class="section-number">4.7.4. </span>Server Production Deployment (API)<a class="headerlink" href="#server-production-deployment-api" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Create a VM with minumum 2 CPUs, 8 GB memory, 30 DB OS drive and a 255GB external data drive.</p></li>
+<li><p>Confgure the VM to use a static IP.</p></li>
+<li><p>Attach and mount data disk as <cite>/datadrive</cite>.</p></li>
+<li><p>Do an OS update. Ensure only root can rwx, others can only r.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo chmod -R <span class="m">774</span> /datadrive
+$ ssh-keygen -t rsa -b <span class="m">4096</span> -C <span class="s2">&quot;&lt;username&gt;@github&quot;</span>
+$ <span class="nb">echo</span> <span class="s2">&quot;place public key in github, then test with ssh -T&quot;</span>
+$ ssh -T git@github.com
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Install dependencies (see Step 1. in development deployment)</p></li>
+<li><p>Set up a new environment. In order to set up an environment from first principles, the cookiecutter app should be installed with `` pip install cookiecutter `` and `` cookiecutter <a class="reference external" href="https://github.com/isabl-io/cookiecutter-api">https://github.com/isabl-io/cookiecutter-api</a> `` after setting up virtualenv. But since this app requires some post configuration changes to be made to it, these changes have been made and committed to a shahcompbio repo. So an easier way to set up is to simply clone this repo as shown below.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> /datadrive
+$ docker system prune -a
+$ docker system prune --volumes -f
+$ git clone https://github.com/shahcompbio/isabl_shahlab.git
+$ <span class="nb">cd</span> isabl_shahlab
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>In production.yml, change volume mappings for django and postgres.</p></li>
+</ol>
+<p>The volume for the django service must include path to data lake which for consistency should be the same as what clients will set as BASE_STORAGE_DIRECTORY in isabl_cli/settings.py.</p>
+<p>For postgres, it is necessary to bind mount the host backups dir so backups can be easily accessed from outside of the container.</p>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">services:</span>
+  <span class="na">django:</span>
+    <span class="na">volumes:</span>
+       <span class="na">- /work/shah/isabl_data_lake:/work/shah/isabl_data_lake</span>
+       <span class="na">- /logs:/logs</span>
+
+
+  <span class="na">postgres:</span>
+    <span class="na">volumes:</span>
+      <span class="na">- production_postgres_data:/var/lib/postgresql/data</span>
+      <span class="na">- /backups:/backups</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo mkdir &lt;data_lake_path&gt;
+chown -R &lt;isabl_user&gt;:&lt;isabl_user&gt; &lt;data_lake_path&gt;
+yum install fuse-sshfs
+OR
+sudo apt-get update
+sudo apt-get install sshfs
+sshfs -o nonempty -o follow_symlinks -o <span class="nv">IdentityFile</span><span class="o">=</span>&lt;path_to_your_public_key&gt; -o allow_other &lt;user&gt;@&lt;remote_server&gt;:&lt;path_to_datalake&gt; &lt;path_to_datalake&gt;
+</pre></div>
+</div>
+<p>To unmount</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir /backups
+</pre></div>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>Install isabl API.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git submodule init
+$ rm -rf requirements/isabl_api
+$ git submodule add git@github.com:shahcompbio/api.git requirements/isabl_api
+$ git submodule update --init --recursive
+$ <span class="nb">cd</span> requirements/isabl_api
+$ git pull origin master
+</pre></div>
+</div>
+<ol class="arabic simple" start="9">
+<li><p>Add “SHAH” as SYSTEM_ID_PREFIX in requirements/isabl_api/isabl_api/settings.py. The SYSTEM_ID_PREFIX will be added to all project system ids and will differentiate shahlab system ids from other lab system ids in the global scope.</p></li>
+<li><p>Generate TLS certificates.</p></li>
+</ol>
+<p>Create a config file for the CSR called req.conf with the following fields. Edit only the fields whose calues are encased in <cite>&lt;&gt;</cite>. For CN, provide an A NAME, also called a glue record. But a C NAME should also work. For &lt;alternate_server_name&gt; provide C NAMES, if any. Note that this configuration includes “Subject Alternate Name” or SAN. This is a required field for Chrome and Firefox browsers.</p>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="k">[req]</span>
+<span class="na">distinguished_name</span> <span class="o">=</span> <span class="s">req_distinguished_name</span>
+<span class="na">req_extensions</span> <span class="o">=</span> <span class="s">v3_req</span>
+<span class="na">prompt</span> <span class="o">=</span> <span class="s">no</span>
+<span class="k">[req_distinguished_name]</span>
+<span class="na">C</span> <span class="o">=</span> <span class="s">US</span>
+<span class="na">ST</span> <span class="o">=</span> <span class="s">NY</span>
+<span class="na">L</span> <span class="o">=</span> <span class="s">NewYork</span>
+<span class="na">O</span> <span class="o">=</span> <span class="s">MSKCC</span>
+<span class="na">OU</span> <span class="o">=</span> <span class="s">ComputationalOncology</span>
+<span class="na">CN</span> <span class="o">=</span> <span class="s">&lt;server_name&gt;</span>
+<span class="k">[v3_req]</span>
+<span class="na">keyUsage</span> <span class="o">=</span> <span class="s">keyEncipherment, dataEncipherment</span>
+<span class="na">extendedKeyUsage</span> <span class="o">=</span> <span class="s">serverAuth</span>
+<span class="na">subjectAltName</span> <span class="o">=</span> <span class="s">@alt_names</span>
+<span class="k">[alt_names]</span>
+<span class="na">DNS.1</span> <span class="o">=</span> <span class="s">&lt;alternate_server_name&gt;</span>
+<span class="na">DNS.2</span> <span class="o">=</span> <span class="s">&lt;alternate_server_name&gt;</span>
+<span class="na">DNS.3</span> <span class="o">=</span> <span class="s">&lt;alternate_server_name&gt;</span>
+<span class="na">DNS.4</span> <span class="o">=</span> <span class="s">&lt;alternate_server_name&gt;</span>
+</pre></div>
+</div>
+<p>Generate the CSR using the configuration above on the server. Make sure to replace &lt;server_name&gt;. The result is the .csr (certificate signing request file) and .key (private key file).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ openssl req -new -out &lt;server_name&gt;.csr -newkey rsa:2048 -nodes -sha256 -keyout &lt;server_name&gt;.key.temp -config req.conf
+</pre></div>
+</div>
+<p>Use the csr file to get a valid certificate file, in PEM format, from a Certificate Authority. At MSKCC, make a request to IT using the MyITApp website.</p>
+<p>Once the certificate is received, verify that it is valid by running the command below. The output should contain fields from req.conf above.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ openssl x509 -in &lt;server_name&gt;.pem -text -noout
+</pre></div>
+</div>
+<p>Check the MD5 hashes of the &lt;server_name&gt;.csr, &lt;server_name&gt;.pem and &lt;server_name&gt;.key files to make sure they match.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ openssl x509 -noout -modulus -in &lt;server_name&gt;.pem <span class="p">|</span> openssl md5
+$ openssl rsa -noout -modulus -in &lt;server_name&gt;.key <span class="p">|</span> openssl md5
+$ openssl req -noout -modulus -in &lt;server_name&gt;.csr <span class="p">|</span> openssl md5
+</pre></div>
+</div>
+<ol class="arabic simple" start="11">
+<li><p>Add cert copy commands to compose/production/caddy/Dockerfile</p></li>
+</ol>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">cp ./compose/production/caddy/&lt;server_name&gt;.pem /etc/&lt;server_name&gt;.pem</span>
+<span class="na">cp ./compose/production/caddy/&lt;server_name&gt;.key /etc/&lt;server_name&gt;.key</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="12">
+<li><p>Copy TLS certificate paths in the docker-container into caddy config file ./compose/production/caddyfile.</p></li>
+</ol>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">http://isabl.shahlab.mskcc.org {</span>
+  <span class="na">redir https://{host}{uri}</span>
+<span class="na">}</span>
+
+<span class="na">{$DOMAIN_NAME} {</span>
+    <span class="na">root /var/www/html</span>
+
+    <span class="na">proxy / django:5000 {</span>
+        <span class="na">transparent</span>
+        <span class="na">except /media</span>
+    <span class="na">}</span>
+
+    <span class="na">browse</span>
+    <span class="na">log stdout</span>
+    <span class="na">errors stdout</span>
+    <span class="na">gzip</span>
+    <span class="na">tls /etc/&lt;server_name&gt;.pem /etc/&lt;server_name&gt;.key</span>
+<span class="na">}</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="13">
+<li><p>In .envs/.production/.caddy add <cite>https://</cite> to DOMAIN_NAME. This is required to explicitly tell caddy to use https and 80/443 ports.</p></li>
+<li><p>Apply the mailgun integration. This is required for the proper functioning of the web application. See section on configuring the stack at <a class="reference external" href="https://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html">https://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html</a>.</p></li>
+</ol>
+<div class="line-block">
+<div class="line">15.1 Disable MAILGUN config</div>
+<div class="line">15.2 grep for and comment out all “send_mail” method calls</div>
+</div>
+<p>OR</p>
+<div class="line-block">
+<div class="line">15.1 Set up a mailgun account.</div>
+<div class="line">15.2 Create a domain.</div>
+<div class="line">15.2 Then copy-paste, domain and key for that domain into MAILGUN_DOMAIN and MAILGUN_API_KEY in .envs/.production/.django.</div>
+<div class="line">15.3 For that domain, add an email recipient.</div>
+<div class="line">15.4 Restart server. Once set up, the recipient will receive crash report emails each time django crashes</div>
+<div class="line">[TODO: add test for testing crash reports]</div>
+</div>
+<ol class="arabic simple" start="15">
+<li><p>In isabl_shahlab/templates/frontend.html, hardcode version number of frontend. The version can be obtained from <a class="reference external" href="https://github.com/isabl-io/web/blob/master/package.json">https://github.com/isabl-io/web/blob/master/package.json</a></p></li>
+</ol>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">&lt;script src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/vue&quot;&gt;&lt;/script&gt;</span>
+<span class="na">&lt;script src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/isabl-web@0.1.12&quot;&gt;&lt;/script&gt;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="16">
+<li><p>Configure server [TODO].</p></li>
+</ol>
+<p>.envs/.production/.django
+.envs/.production/.postgres
+.envs/.production/.caddy</p>
+<ol class="arabic simple" start="17">
+<li><p>Build the application and verify migrations.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If password authentication fails for postgres, use ‘docker system prune –volumes -f’ and try this step again.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose -f production.yml build
+$ docker images
+$ docker-compose -f production.yml run --rm django python manage.py migrate
+$ docker-compose -f production.yml run --rm django python manage.py showmigrations
+$ docker-compose -f production.yml run --rm django python manage.py createsuperuser
+$ docker-compose -f production.yml down
+$ docker-compose -f production.yml up
+</pre></div>
+</div>
+<ol class="arabic simple" start="18">
+<li><p>Set up default user groups using the command below. Use the admin UI to add additional view access for the Analysts group to the following models.</p></li>
+</ol>
+<p>CustomField, Individual, Center, Disease, Experiment, Technique, Platform, Project, Submission, Analysis, Application, Assembly</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose -f production.yml run --rm django python manage.py create_default_groups
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Other useful commands are,</p>
+<p>$ docker-compose -f production.yml up -d   # to start in detached mode</p>
+<dl class="simple">
+<dt>$ docker-compose logs -f -t  # to attach to logs</dt><dd><p>(detach with ctrl+c)</p>
+</dd>
+</dl>
+<p>$ docker-compose -f production.yml run –rm django python manage.py shell   # to start a django shell</p>
+<p>$ docker-compose -f production.yml scale django=4   # to scale django</p>
+<p>$ docker-compose -f production.yml scale celeryworker=2  # to scale celery workers</p>
+</div>
+</div>
+<div class="section" id="client-production-deployment-cli">
+<h2><span class="section-number">4.7.5. </span>Client Production Deployment (CLI)<a class="headerlink" href="#client-production-deployment-cli" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Clone isabl_cli and shahlab_apps repos. If you plan to execute isabl apps, you will need to install the CLI on Juno,  (where the data lake resides). Or, you may wish to remote mount the juno data lake directory if you wish to work with the CLI on your local machine.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> &lt;to a dir where cli and apps should be installed&gt;
+$ git clone https://github.com/shahcompbio/shahlab_apps.git
+$ git clone https://github.com/shahcompbio/isabl_cli.git
+$ virtualenv -p python3 venv
+$ <span class="nb">source</span> venv/bin/activate
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Install dependencies. Notice apps and cli use the same virtual environment.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> isabl_cli
+$ python setup.py install
+$ <span class="nb">cd</span> ../shahlab_apps
+$ python setup.py install
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>In isabl_cli/api.py,</p></li>
+</ol>
+<p>replace,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span> <span class="o">=</span> <span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ISABL_API_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;http://0.0.0.0:8000/api/v1/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>with,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span> <span class="o">=</span> <span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ISABL_API_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;https://isabl.shahlab.mskcc.org/api/v1/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>OR, you may set an environment variable in your shell.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">ISABL_API_URL</span><span class="o">=</span><span class="s2">&quot;https://isabl.shahlab.mskcc.org/api/v1/&quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>In isabl_cli/settings.py,</p></li>
+</ol>
+<p>replace,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ISABL_CLIENT_ID&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>with,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ISABL_CLIENT_ID&quot;</span><span class="p">)</span>
+<span class="n">client_id</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>OR you may set an environment variable in your shell.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">ISABL_CLIENT_ID</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>In isabl_cli/settings.py update _DEFAULTS map to point to the location of the data lake. The default location is <cite>~/isabl_storage</cite>. This is the location of the data lake on juno.</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;BASE_STORAGE_DIRECTORY&quot;</span><span class="p">:</span> <span class="s2">&quot;/work/shah/isabl_datalake&quot;</span><span class="p">,</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Re-install CLI if you made code edits in steps 2-4.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>venv<span class="o">)</span>$ python setup.py install
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Create file <cite>~/.isabl/settings.json</cite> and add the following contents</p></li>
+</ol>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">{</span>
+  <span class="na">&quot;api_token&quot;: &quot;GET_TOKEN_FROM_ISABL_ADMIN&quot;,</span>
+  <span class="na">&quot;token&quot;: null</span>
+<span class="na">}</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>In isabl_cli/settings.py update _DEFAULTS map to include applications that have been registered on the server. For example,</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;INSTALLED_APPLICATIONS&quot;</span><span class="p">:</span> <span class="p">[</span>
+  <span class="s2">&quot;shahlab_apps.apps.cellranger.apps.CELLRANGER&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;shahlab_apps.apps.scrna.apps.SCRNA&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;shahlab_apps.apps.kallisto.apps.KALLISTO&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;shahlab_apps.apps.cellphonedb.apps.CELLPHONEDB&quot;</span><span class="p">,],</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Running <cite>isabl</cite> now should bring up the help menu with apps-grch37 and apps-grch38 applications. This confirms that isabl_cli is able to communicate with isabl_api.</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ isabl
+      Usage: isabl [OPTIONS] COMMAND [ARGS]...
+
+        Run Isabl command line tools.
+
+      Options:
+        --version  Show the version and exit.
+        --help     Show this message and exit.
+
+      Commands:
+        apps-grch37              GRCh37 applications.
+        apps-grch38              GRCh38 applications.
+        get-bams                 Get storage directories, use `pattern` to match...
+        get-bed                  Get a BED file for a given Sequencing Tehcnique.
+        get-count                Get count of database instances.
+        get-data                 Get file paths for experiments sequencing data.
+        get-metadata             Retrieve metadata for multiple instances.
+        get-outdirs              Get analyses outdirs, use `pattern` to match...
+        get-paths                Get storage directories, use `pattern` to match...
+        get-reference            Get reference resource for an Assembly.
+        get-results              Get analyses results.
+        import-bedfiles          Register targets and baits bed_files in...
+        import-data              Find and import experiments data from many...
+        import-reference-data    Register reference data in the assembly&#39;s data...
+        import-reference-genome  Register an assembly reference genome.
+        login                    Login with isabl credentials.
+        merge-project-analyses   Merge analyses by project primary key.
+        patch-results            Update the results field of many analyses.
+        process-finished         Process and update finished analyses.
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">isabl_api</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">2. Assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">3. End User</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="developer.html">4. Developer</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="functionalRequirements.html">4.1. Functional Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nonFunctionalRequirements.html">4.2. NonFunctional Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architectureSystemLevelDesign.html">4.3. Architecture - High Level Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architectureComponentLevelDesign.html">4.4. Architecture - Component Level Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="formalSpecs.html">4.5. Formal Specs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemRequirements.html">4.6. System Requirements</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.7. Installation Instructions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#server-development-deployment-api">4.7.1. Server Development Deployment (API)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#client-development-deployment-cli">4.7.2. Client Development Deployment (CLI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#staging-deployment">4.7.3. Staging Deployment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#server-production-deployment-api">4.7.4. Server Production Deployment (API)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#client-production-deployment-cli">4.7.5. Client Production Deployment (CLI)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configurationDetails.html">4.8. Configuration Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html">4.9. Maintenance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="knownIssues.html">4.10. Known Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="todos.html">4.11. TODOs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html">4.12. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keywords.html">4.13. Keywords</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developerOperations.html">5. Developer Operations</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="developer.html"><span class="section-number">4. </span>Developer</a><ul>
+      <li>Previous: <a href="systemRequirements.html" title="previous chapter"><span class="section-number">4.6. </span>System Requirements</a></li>
+      <li>Next: <a href="configurationDetails.html" title="next chapter"><span class="section-number">4.8. </span>Configuration Details</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Shah Lab, MSKCC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/installation.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

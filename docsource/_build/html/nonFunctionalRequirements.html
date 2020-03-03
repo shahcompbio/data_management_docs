@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>4.2. NonFunctional Requirements &#8212; isabl_api 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4.3. Architecture - High Level Design" href="architectureSystemLevelDesign.html" />
+    <link rel="prev" title="4.1. Functional Requirements" href="functionalRequirements.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="nonfunctional-requirements">
+<h1><span class="section-number">4.2. </span>NonFunctional Requirements<a class="headerlink" href="#nonfunctional-requirements" title="Permalink to this headline">¶</a></h1>
+<ol class="arabic simple">
+<li><p>Individual-centric relational model (Individual &gt; Sample &gt; Analysis).</p></li>
+<li><p>Maintainability: A centralized system for the administration of data across many compute units.</p></li>
+<li><p>Maintainability: Runbooks for backup, restore and database migrations of database. Runbooks for backup, restore and migration of data in the data lake.</p></li>
+<li><p>Standardization: Adhere to standards like FHIR [3]. [TBD]</p></li>
+<li><p>Security: Secure login and deployment keys.</p></li>
+<li><p>Usability: Simple workflow for each operational use case.</p></li>
+<li><p>Extensibility: Ability to extend system for different types of data like blood, pathology etc.</p></li>
+<li><p>Extensibility: Ability to extend entire system to allow for bespoke needs of compute units.</p></li>
+<li><p>Scalability: Support thousands of patients, with tens of samples, tens of experimental data and tens of analyses results (10^3 (thousands of patients) • 10^1 (tens of samples) • 10^1 (tens of experimental data) • 10^1 (tens of analyses) = 10^6)</p></li>
+</ol>
+<p>10. Governance: Ensure data integrity - quality through formal (unambiguous in terms of correctness and completeness) documentation, formal validation, hashing (to guard against data corruption), immutability (app data should not be modifiable, but only allowed to be extended) and process idempotency.
+Convention over configuration as a strategy.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">isabl_api</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">2. Assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">3. End User</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="developer.html">4. Developer</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="functionalRequirements.html">4.1. Functional Requirements</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.2. NonFunctional Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architectureSystemLevelDesign.html">4.3. Architecture - High Level Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architectureComponentLevelDesign.html">4.4. Architecture - Component Level Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="formalSpecs.html">4.5. Formal Specs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemRequirements.html">4.6. System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">4.7. Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configurationDetails.html">4.8. Configuration Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html">4.9. Maintenance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="knownIssues.html">4.10. Known Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="todos.html">4.11. TODOs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html">4.12. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keywords.html">4.13. Keywords</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developerOperations.html">5. Developer Operations</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="developer.html"><span class="section-number">4. </span>Developer</a><ul>
+      <li>Previous: <a href="functionalRequirements.html" title="previous chapter"><span class="section-number">4.1. </span>Functional Requirements</a></li>
+      <li>Next: <a href="architectureSystemLevelDesign.html" title="next chapter"><span class="section-number">4.3. </span>Architecture - High Level Design</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Shah Lab, MSKCC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nonFunctionalRequirements.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

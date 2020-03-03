@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>4.9. Maintenance &#8212; isabl_api 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4.10. Known Issues" href="knownIssues.html" />
+    <link rel="prev" title="4.8. Configuration Details" href="configurationDetails.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="maintenance">
+<h1><span class="section-number">4.9. </span>Maintenance<a class="headerlink" href="#maintenance" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="elabinventory-schema-changes">
+<h2><span class="section-number">4.9.1. </span>ELabInventory schema changes<a class="headerlink" href="#elabinventory-schema-changes" title="Permalink to this headline">¶</a></h2>
+<p>Elab’s behavior for schema changes is as follows:</p>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt>create new field</dt><dd><ul class="simple">
+<li><p>does not affect existing records</p></li>
+<li><p>once new field is created, existing records can be edited to add values to this new field.</p></li>
+<li><p>once new field is created, new records will contain the new field.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>update existing field</dt><dd><ul class="simple">
+<li><p>does not update field names of existing records or affect their existing values</p></li>
+<li><p>however, editing existing fields will require adherence to the new field type and validation rules that have been changed</p></li>
+<li><p>new records added after the update will get the new field name if field name is changed.</p></li>
+<li><p>delete existing field - fields in existing records get deleted</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+<p><strong>Best practice to follow</strong>:</p>
+<p>Add field or controlled vocabulary but never update or delete a field.</p>
+<dl class="simple">
+<dt>If there is a strong need to update a field, we should follow the 3-phase approach -</dt><dd><ol class="arabic simple">
+<li><p>add new field with update</p></li>
+<li><p>copy values from old field to new field</p></li>
+<li><p>delete old field.</p></li>
+</ol>
+</dd>
+</dl>
+<p>We simply never delete a field. We only tag it as being deprecated in our documentation.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">isabl_api</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">2. Assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">3. End User</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="developer.html">4. Developer</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="functionalRequirements.html">4.1. Functional Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nonFunctionalRequirements.html">4.2. NonFunctional Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architectureSystemLevelDesign.html">4.3. Architecture - High Level Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architectureComponentLevelDesign.html">4.4. Architecture - Component Level Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="formalSpecs.html">4.5. Formal Specs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemRequirements.html">4.6. System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">4.7. Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configurationDetails.html">4.8. Configuration Details</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.9. Maintenance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#elabinventory-schema-changes">4.9.1. ELabInventory schema changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="knownIssues.html">4.10. Known Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="todos.html">4.11. TODOs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html">4.12. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keywords.html">4.13. Keywords</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developerOperations.html">5. Developer Operations</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="developer.html"><span class="section-number">4. </span>Developer</a><ul>
+      <li>Previous: <a href="configurationDetails.html" title="previous chapter"><span class="section-number">4.8. </span>Configuration Details</a></li>
+      <li>Next: <a href="knownIssues.html" title="next chapter"><span class="section-number">4.10. </span>Known Issues</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Shah Lab, MSKCC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maintenance.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

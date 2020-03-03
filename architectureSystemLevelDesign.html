@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>4.3. Architecture - High Level Design &#8212; isabl_api 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4.4. Architecture - Component Level Design" href="architectureComponentLevelDesign.html" />
+    <link rel="prev" title="4.2. NonFunctional Requirements" href="nonFunctionalRequirements.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="architecture-high-level-design">
+<h1><span class="section-number">4.3. </span>Architecture - High Level Design<a class="headerlink" href="#architecture-high-level-design" title="Permalink to this headline">¶</a></h1>
+<p>This section describes the larger system that supports the storage and analysis of data within the Isabl subsystem.</p>
+<div class="figure align-default" id="id1">
+<span id="fig-main"></span><img alt="_images/shah_lab_data_flow.png" src="_images/shah_lab_data_flow.png" />
+<p class="caption"><span class="caption-text">Shah Lab data storage and analysis system.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<div class="section" id="design-rationale">
+<h2><span class="section-number">4.3.1. </span>Design Rationale:<a class="headerlink" href="#design-rationale" title="Permalink to this headline">¶</a></h2>
+<p><strong>eLab</strong></p>
+<p>eLab was selected for storage of specimen data in order to overcome REDCap’s limitation of not being able to store hierarchical data beyond a single level of (patient) hierarchy.</p>
+<p><strong>REDCap</strong></p>
+<p>REDCap was selected for the following reasons.</p>
+<ol class="arabic simple">
+<li><p><strong>ID collision detection</strong>: It serves as a data collection or aggregation point from various other data sources, all of which have identifiable ids, while some of which may not have de-identified Ids that are common to the other sources (makes data joins difficult if not impossible). There is also the possibility of some datasets coming in with Ids that are unique only in their Id space (not globally unique). Specimen Ids coming from sources like Lab Medicine and IMF are an example of this. This holding area for data will serve as a place where data can be collected, globally identified and joined, and later de-identified before it gets propagated into the research space.</p></li>
+<li><p><strong>Formal Specification</strong> It serves as a place where a formal specification can be created for all data coming in (REDCap’s data dictionary works as the formal spec). This specification aids in the development of validation mechanisms that will ultimately aid in keeping the data lake clean.</p></li>
+<li><p><strong>PHI space</strong> It has infosec approval.</p></li>
+<li><p><strong>Low overhead</strong> It is quick to set up and fairly easy to iterate on. No need for us to develop and maintain database and UI code.</p></li>
+<li><p><strong>Ability to integrate with other systems - has institutional support</strong> The MSK EXTRACT system and workflow is built around the use of REDCap. Information systems has developed a lot of tooling around REDCap. Having REDCap will help integrate well with EXTRACT workflow and systems when it comes time to apply ontologies to further enrich the dataset. Also the data governance team is familiar with REDCap and having REDCap can help facilitate any collaboration we have with them.</p></li>
+<li><p><strong>Review and annotation</strong> Provide a view into the raw meta-data (outside of final visualization) so researchers and view the meta-data in detail and also provide annotations.</p></li>
+<li><p><strong>Parallelization of effort</strong> Allow data collection and analysis pipeline execution to happen concurrently, at different speeds and with different groups to avoid bottlenecking.</p></li>
+<li><p><strong>Multi-user system</strong> with access control to prevent some users from seeing PHI or performing edits.</p></li>
+<li><p><strong>API</strong> Has API.</p></li>
+</ol>
+<p>10 [Does have the drawback of not supporting hierarchical data like patient-&gt;specimen-&gt;aliquot level hierarchy.]</p>
+<p><strong>Isabl Data Lake</strong></p>
+<ol class="arabic simple">
+<li><p>Has the ability to present results information on the UI.</p></li>
+<li><p>Simple interface with the main focus of data tracking.</p></li>
+<li><p>Lightweight and scalable system (scalable at least to a Pb of data or storage limits of cluster).</p></li>
+<li><p>Has API.</p></li>
+<li><p>Multi-user system (but no access control)</p></li>
+<li><p>[May lack generality and flexibility to support the storage/access and retrieval of multi-model data. This is being investigated.]</p></li>
+<li><p>Need for separate isabl - admin access to django admin + sql (level of access is proportional to level of productivity), low maintainance overhead for devops work, quick to make code updates. Also helps core team improve their product through feedback from our end-to-end use.</p></li>
+</ol>
+<p><strong>eLab</strong></p>
+<ol class="arabic simple">
+<li><ul class="simple">
+<li><p>Has sample accessioning functionality.</p></li>
+</ul>
+</li>
+<li><p>Has specimen-aliquot level hierarchy, so specimen info needs to be entered only once for all of its aliquots.</p></li>
+<li><p>Has ability to perform bulk updates of aliquots belonging to a particular specimen.</p></li>
+<li><p>Simple yet powerful browser based query system.</p></li>
+<li><p>Supports custom views with filters.</p></li>
+<li><p>Generates globally unique ids.</p></li>
+<li><p>Has API.</p></li>
+<li><p>Multi user system (but no access control).</p></li>
+<li><p>Attach files at aliquot level (can’t do with spreadsheets).</p></li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">isabl_api</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">2. Assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">3. End User</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="developer.html">4. Developer</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="functionalRequirements.html">4.1. Functional Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nonFunctionalRequirements.html">4.2. NonFunctional Requirements</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.3. Architecture - High Level Design</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#design-rationale">4.3.1. Design Rationale:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architectureComponentLevelDesign.html">4.4. Architecture - Component Level Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="formalSpecs.html">4.5. Formal Specs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemRequirements.html">4.6. System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">4.7. Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configurationDetails.html">4.8. Configuration Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html">4.9. Maintenance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="knownIssues.html">4.10. Known Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="todos.html">4.11. TODOs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html">4.12. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keywords.html">4.13. Keywords</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developerOperations.html">5. Developer Operations</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="developer.html"><span class="section-number">4. </span>Developer</a><ul>
+      <li>Previous: <a href="nonFunctionalRequirements.html" title="previous chapter"><span class="section-number">4.2. </span>NonFunctional Requirements</a></li>
+      <li>Next: <a href="architectureComponentLevelDesign.html" title="next chapter"><span class="section-number">4.4. </span>Architecture - Component Level Design</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Shah Lab, MSKCC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/architectureSystemLevelDesign.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,458 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>3.1. Data Collection &#8212; isabl_api 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3.2. CLI Access to Data" href="cli.html" />
+    <link rel="prev" title="3. End User" href="user.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="data-collection">
+<h1><span class="section-number">3.1. </span>Data Collection<a class="headerlink" href="#data-collection" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-default" id="id1">
+<span id="fig-main"></span><img alt="_images/Spectrum_Tissue_Collection_Workflow.png" src="_images/Spectrum_Tissue_Collection_Workflow.png" />
+<p class="caption"><span class="caption-text">MSK Spectrum Tissue Collection Workflow.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<div class="section" id="clinic">
+<h2><span class="section-number">3.1.1. </span>Clinic<a class="headerlink" href="#clinic" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id2">
+<img alt="_images/Clinic_Dataflow.png" src="_images/Clinic_Dataflow.png" />
+<p class="caption"><span class="caption-text">Clinic Dataflow.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field in Workflow</p></th>
+<th class="head"><p>Data Fields</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Screen Clinic</p></td>
+<td><ul class="simple">
+<li><p>Patient ID</p></li>
+<li><p>MRN</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Surgery scheduled and
+technician notified</p></td>
+<td><ul class="simple">
+<li><p>Surgery #</p></li>
+<li><p>Surgery Type</p></li>
+<li><p>Surgery Date</p></li>
+<li><p>Surgeon</p></li>
+<li><p>Surgery Location</p></li>
+<li><p>Room</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="or-collection">
+<h2><span class="section-number">3.1.2. </span>OR Collection<a class="headerlink" href="#or-collection" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id3">
+<img alt="_images/OR_Sample_Collection_Dataflow.png" src="_images/OR_Sample_Collection_Dataflow.png" />
+<p class="caption"><span class="caption-text">OR Collection Dataflow.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field in Workflow</p></th>
+<th class="head"><p>Data Fields</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>OR Sample Collection</p></td>
+<td><ul class="simple">
+<li><p>Excluded</p></li>
+<li><p>Final Pathology</p></li>
+<li><p>Specify Diagnosis</p></li>
+<li><p>Reason for Exclusion</p></li>
+<li><p>Specimen Site</p></li>
+<li><p>Site Details</p></li>
+<li><p>Primary Site</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="single-cell-dissociation">
+<h2><span class="section-number">3.1.3. </span>Single Cell Dissociation<a class="headerlink" href="#single-cell-dissociation" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id4">
+<img alt="_images/Single_Cell_Dissociation_Dataflow.png" src="_images/Single_Cell_Dissociation_Dataflow.png" />
+<p class="caption"><span class="caption-text">Single Cell Dissociation Dataflow.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field in Workflow</p></th>
+<th class="head"><p>Data Fields</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Single Cell Dissociation</p></td>
+<td><ul class="simple">
+<li><p>Processing Date</p></li>
+<li><p>Tissue Type</p></li>
+<li><p>Total Cell Count (cells/ml)</p></li>
+<li><p>Live Cell Count (cells/ml)</p></li>
+<li><p>Total Volume (ml)</p></li>
+<li><p>Viability (%)</p></li>
+<li><p>Downstream Submission</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Flow Cytometry</p></td>
+<td><ul class="simple">
+<li><p>Sorting Method</p></li>
+<li><p>Flow Instrument</p></li>
+<li><p>Flow Data Summary</p></li>
+<li><p>Flow Data fcs files</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Storage of sorted single
+cell suspensions</p></td>
+<td><ul class="simple">
+<li><p>Storage Populations</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="single-cell-rna-sequencing-scrnaseq">
+<h2><span class="section-number">3.1.4. </span>Single Cell RNA Sequencing (scRNASeq)<a class="headerlink" href="#single-cell-rna-sequencing-scrnaseq" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id5">
+<img alt="_images/scRNA_seq_dataflow.png" src="_images/scRNA_seq_dataflow.png" />
+<p class="caption"><span class="caption-text">scRNA seq Dataflow.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field in Workflow</p></th>
+<th class="head"><p>Data Fields</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>scRNA</p></td>
+<td><ul class="simple">
+<li><p>Submitted Populations</p></li>
+<li><p>Sequencing Technique</p></li>
+<li><p>scRNA Date of Submission</p></li>
+<li><p>scRNA Sequencing Location</p></li>
+<li><p>Initial Submission QC</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>10X cDNA and Library
+Prep</p></td>
+<td><ul class="simple">
+<li><p># of Cells Captured</p></li>
+<li><p>QC Checks</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>scRNA Sequencing</p></td>
+<td><ul class="simple">
+<li><p>scRNA IGO ID</p></li>
+<li><p>scRNA IGO Submission ID</p></li>
+<li><p>scRNA REX Sample ID</p></li>
+<li><p>scRNA Sample Status</p></li>
+<li><p>scRNA iLab Submission Form</p></li>
+<li><p>scRNA REX Submission Form</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Storage of sorted single
+cell suspensions</p></td>
+<td><ul class="simple">
+<li><p>Storage Populations</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="direct-library-prep-dlp">
+<h2><span class="section-number">3.1.5. </span>Direct Library Prep (DLP)<a class="headerlink" href="#direct-library-prep-dlp" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id6">
+<img alt="_images/DLP_dataflow.png" src="_images/DLP_dataflow.png" />
+<p class="caption"><span class="caption-text">DLP Dataflow.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field in Workflow</p></th>
+<th class="head"><p>Data Fields</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DLP</p></td>
+<td><ul class="simple">
+<li><p>DLP Date of Submission</p></li>
+<li><p>DLP Sequencing Location</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>DLP Sequencing</p></td>
+<td><ul class="simple">
+<li><p>DLP IGO ID</p></li>
+<li><p>DLP IGO Submission ID</p></li>
+<li><p>DLP REX Sample ID</p></li>
+<li><p>DLP Sample Status</p></li>
+<li><p>DLP iLab Submission Form</p></li>
+<li><p>DLP REX Submission Form</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="ppbc-collection">
+<h2><span class="section-number">3.1.6. </span>PPBC Collection<a class="headerlink" href="#ppbc-collection" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id7">
+<img alt="_images/PPBC.png" src="_images/PPBC.png" />
+<p class="caption"><span class="caption-text">PPBC Collection Dataflow.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field in Workflow</p></th>
+<th class="head"><p>Data Fields</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>FFPE
+Frozen Tissue (-80c)</p></td>
+<td><ul class="simple">
+<li><p>PPBC Bank Number</p></li>
+<li><p>PPBC Aliquot Numbered</p></li>
+<li><p>PPBC Accession #</p></li>
+<li><p>PPBC Downstream Submission</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="whole-genome-sequencing-wgs">
+<h2><span class="section-number">3.1.7. </span>Whole Genome Sequencing (WGS)<a class="headerlink" href="#whole-genome-sequencing-wgs" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id8">
+<img alt="_images/WGS.png" src="_images/WGS.png" />
+<p class="caption"><span class="caption-text">WGS Dataflow.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field in Workflow</p></th>
+<th class="head"><p>Data Fields</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Microdissection</p></td>
+<td><ul class="simple">
+<li><p>Date requested from PPBC</p></li>
+<li><p>Date received from PPBC</p></li>
+<li><p>H&amp;E available?</p></li>
+<li><p>Sectioning Type</p></li>
+<li><p># of Curls Cut</p></li>
+<li><p># Slides Cut for Microdissection</p></li>
+<li><p>Thickness of tissue (um)</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>DNA/RNA Extractions</p></td>
+<td><ul class="simple">
+<li><p>Concentration (ng/ul)</p></li>
+<li><p>Volume (ul)</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Bulk WGS</p></td>
+<td><ul class="simple">
+<li><p>WGS Date of Submission</p></li>
+<li><p>WGS Sequencing Location</p></li>
+<li><p>WGS IGO ID</p></li>
+<li><p>WGS IGO Submission ID</p></li>
+<li><p>WGS REX Sample ID</p></li>
+<li><p>WGS Sample Status</p></li>
+<li><p>WGS iLab Submission Form</p></li>
+<li><p>WGS REX Submission Form</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="immunofluorescence-if">
+<h2><span class="section-number">3.1.8. </span>Immunofluorescence (IF)<a class="headerlink" href="#immunofluorescence-if" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default" id="id9">
+<img alt="_images/IF.png" src="_images/IF.png" />
+<p class="caption"><span class="caption-text">IF Dataflow.</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field in Workflow</p></th>
+<th class="head"><p>Data Fields</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>IF</p></td>
+<td><ul class="simple">
+<li><p>IF Date of Submission</p></li>
+<li><p># Slides submitted</p></li>
+<li><p>IF Panel</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">isabl_api</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">2. Assumptions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="user.html">3. End User</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.1. Data Collection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#clinic">3.1.1. Clinic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#or-collection">3.1.2. OR Collection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#single-cell-dissociation">3.1.3. Single Cell Dissociation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#single-cell-rna-sequencing-scrnaseq">3.1.4. Single Cell RNA Sequencing (scRNASeq)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direct-library-prep-dlp">3.1.5. Direct Library Prep (DLP)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ppbc-collection">3.1.6. PPBC Collection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#whole-genome-sequencing-wgs">3.1.7. Whole Genome Sequencing (WGS)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#immunofluorescence-if">3.1.8. Immunofluorescence (IF)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html">3.2. CLI Access to Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">3.3. API Access to Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">3.4. Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="releaseNotes.html">3.5. Release Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">4. Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developerOperations.html">5. Developer Operations</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="user.html"><span class="section-number">3. </span>End User</a><ul>
+      <li>Previous: <a href="user.html" title="previous chapter"><span class="section-number">3. </span>End User</a></li>
+      <li>Next: <a href="cli.html" title="next chapter"><span class="section-number">3.2. </span>CLI Access to Data</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Shah Lab, MSKCC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/dataCollection.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

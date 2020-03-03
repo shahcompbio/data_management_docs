@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>4.1. Functional Requirements &#8212; isabl_api 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4.2. NonFunctional Requirements" href="nonFunctionalRequirements.html" />
+    <link rel="prev" title="4. Developer" href="developer.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="functional-requirements">
+<h1><span class="section-number">4.1. </span>Functional Requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h1>
+<ol class="arabic simple">
+<li><p>Store multi-modal data with support for hierarchical meta-data. (in-progress)</p></li>
+<li><p>Patient centric/project centric analyses. (in-progress)</p></li>
+<li><p>Export out (an untracked copy), move or replicate (with tracking) experiments and analyses with provenance in order to publish datasets externally (would be good if we can do this with reproducibility - ability for others to easily run our scripts).</p></li>
+<li><p>Permissions - ideally private, protected, public levels of rwx access on all access points - UI, cli, api and file system. But at minimum, group level protected access.</p></li>
+<li><p>Add data to an existing dataset and either rerun an existing analysis or run a new analysis.</p></li>
+<li><p>Continue an analysis from where it left off in case of a crash (don’t trash intermediate results).</p></li>
+<li><p>Give users the ability to create and manage their own project space and run their own analyses (not be limited to a single isabl_bot user).</p></li>
+<li><p>Archive data by moving to warm and tracking it in warm.</p></li>
+<li><p>Delete data (and lineage) that is no longer required.</p></li>
+<li><p>Compute interchangeably on cluster and cloud.</p></li>
+<li><p>Provide metrics on user, compute and storage information.</p></li>
+<li><p>Ability to add/change notes to track changes (natural language) either through jira or within isabl itself at various levels - project, experiment, analysis. (done?)</p></li>
+<li><p>REST API (done)</p></li>
+<li><p>Provide a pluggable interface for analysis pipelines/workflows in order to separate the analysis concern from the data management concern. (done)</p></li>
+<li><p>Provenance and reproducibility. (done?)</p></li>
+<li><p>Data lake search scoped by permissions. (done)</p></li>
+<li><p>A visual interface to view results of analyses for spot checking. (done)</p></li>
+<li><p>Workflow management - orchestration of multiple pipeline runs.</p></li>
+</ol>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">isabl_api</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">2. Assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">3. End User</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="developer.html">4. Developer</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.1. Functional Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nonFunctionalRequirements.html">4.2. NonFunctional Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architectureSystemLevelDesign.html">4.3. Architecture - High Level Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architectureComponentLevelDesign.html">4.4. Architecture - Component Level Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="formalSpecs.html">4.5. Formal Specs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemRequirements.html">4.6. System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">4.7. Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configurationDetails.html">4.8. Configuration Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html">4.9. Maintenance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="knownIssues.html">4.10. Known Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="todos.html">4.11. TODOs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html">4.12. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keywords.html">4.13. Keywords</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developerOperations.html">5. Developer Operations</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="developer.html"><span class="section-number">4. </span>Developer</a><ul>
+      <li>Previous: <a href="developer.html" title="previous chapter"><span class="section-number">4. </span>Developer</a></li>
+      <li>Next: <a href="nonFunctionalRequirements.html" title="next chapter"><span class="section-number">4.2. </span>NonFunctional Requirements</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Shah Lab, MSKCC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/functionalRequirements.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

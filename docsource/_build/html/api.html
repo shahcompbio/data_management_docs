@@ -1,0 +1,460 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>3.3. API Access to Data &#8212; isabl_api 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3.4. Troubleshooting" href="troubleshooting.html" />
+    <link rel="prev" title="3.2. CLI Access to Data" href="cli.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="api-access-to-data">
+<h1><span class="section-number">3.3. </span>API Access to Data<a class="headerlink" href="#api-access-to-data" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2><span class="section-number">3.3.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Calls to the isabl API is documented at <a class="reference external" href="https://docs.isabl.io/retrieve-data">https://docs.isabl.io/retrieve-data</a>. This page provides additional information and examples that may be helpful for getting started with using the API.</p>
+<p>The isabl API documentation can be accessed at <a class="reference external" href="https://isabl.shahlab.mskcc.org/api/v1/">https://isabl.shahlab.mskcc.org/api/v1/</a>.</p>
+<p>The API may be accessed via the isabl CLI. Instructions for installing the CLI are at <a class="reference external" href="https://shahlab.ca/isabl_api/installation.html">https://shahlab.ca/isabl_api/installation.html</a>
+under the Development Deployment section and Production Deployment section. Follow CLI Production Deployment for accessing production data.</p>
+<p>Isabl has a project centric database. The schema for the database is available at <a class="reference external" href="https://github.com/shahcompbio/isabl_api/blob/master/docs/_static/schema.pdf">https://github.com/shahcompbio/isabl_api/blob/master/docs/_static/schema.pdf</a></p>
+<p>In the simple context of “input-&gt;process-&gt;output”, the Experiment object holds information about the inputs. The Application object holds information about the application, or process, that is to be executed, and the Analysis object holds information about the outputs, in addition to any runtime configuration that was used by the process.</p>
+<p>A good starting point for accessing information for a full run is to look up the experiment object as this object has references to other relevant objects like the Project that the experiments belongs to, the Sample(s) on which the experiment was set up and the corresponding set of analyses that were generated from the Experiment.</p>
+<p>Once the CLI has been set up, it may be used to make this simple call to an experiment object as shown below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">isabl_cli</span> <span class="k">as</span> <span class="nn">ii</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="n">pp</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">ii</span><span class="o">.</span><span class="n">get_experiments</span><span class="p">(</span><span class="n">system_id</span><span class="o">=</span><span class="s1">&#39;SHAH_H000005_T01_01_scWT01&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The code above prints out an experiment object for an experiment with the specified system_id. The print to console out is presented below. Notice that it contains information of related objects such as ‘projects’, ‘results’, ‘sample’ and ‘individual’ in addition to information about the input set that the experiment encapsulates as ‘raw data’.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Retrieving <span class="m">1</span> from experiments API endpoint...
+<span class="o">{</span> <span class="s1">&#39;aliquot_id&#39;</span>: <span class="s1">&#39;Unspecified Aliquot&#39;</span>,
+  <span class="s1">&#39;bam_files&#39;</span>: <span class="o">{}</span>,
+  <span class="s1">&#39;center&#39;</span>: <span class="o">{</span> <span class="s1">&#39;acronym&#39;</span>: <span class="s1">&#39;IGO&#39;</span>,
+              <span class="s1">&#39;created&#39;</span>: <span class="s1">&#39;2019-05-09T14:43:13.359533-04:00&#39;</span>,
+              <span class="s1">&#39;created_by&#39;</span>: <span class="s1">&#39;jdoe&#39;</span>,
+              <span class="s1">&#39;custom_fields&#39;</span>: <span class="o">{}</span>,
+              <span class="s1">&#39;data&#39;</span>: <span class="o">{}</span>,
+              <span class="s1">&#39;model_name&#39;</span>: <span class="s1">&#39;Center&#39;</span>,
+              <span class="s1">&#39;modified&#39;</span>: <span class="s1">&#39;2019-05-09T14:43:13.359558-04:00&#39;</span>,
+              <span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;MSKCC IGO&#39;</span>,
+              <span class="s1">&#39;notes&#39;</span>: <span class="s1">&#39;&#39;</span>,
+              <span class="s1">&#39;pk&#39;</span>: <span class="m">1</span>,
+              <span class="s1">&#39;slug&#39;</span>: <span class="s1">&#39;MSKCC IGO (IGO)&#39;</span>,
+              <span class="s1">&#39;storage_url&#39;</span>: None,
+              <span class="s1">&#39;storage_usage&#39;</span>: <span class="m">0</span>,
+              <span class="s1">&#39;tags&#39;</span>: <span class="o">[]</span>,
+              <span class="s1">&#39;uuid&#39;</span>: <span class="s1">&#39;c6fc7946-cade-4f09-9f36-82a662bf1ac0&#39;</span><span class="o">}</span>,
+  <span class="s1">&#39;created&#39;</span>: <span class="s1">&#39;2019-05-09T16:06:48.568422-04:00&#39;</span>,
+  <span class="s1">&#39;created_by&#39;</span>: <span class="s1">&#39;jdoe&#39;</span>,
+  <span class="s1">&#39;custom_fields&#39;</span>: <span class="o">{</span> <span class="s1">&#39;experiment_center_identifier&#39;</span>: <span class="s1">&#39;IGO&#39;</span>,
+                     <span class="s1">&#39;is_pdx&#39;</span>: None,
+                     <span class="s1">&#39;is_single_cell&#39;</span>: True,
+                     <span class="s1">&#39;read_length&#39;</span>: None,
+                     <span class="s1">&#39;read_type&#39;</span>: None<span class="o">}</span>,
+  <span class="s1">&#39;data&#39;</span>: <span class="o">{}</span>,
+  <span class="s1">&#39;identifier&#39;</span>: <span class="s1">&#39;UNKNOWN_23&#39;</span>,
+  <span class="s1">&#39;model_name&#39;</span>: <span class="s1">&#39;Experiment&#39;</span>,
+  <span class="s1">&#39;modified&#39;</span>: <span class="s1">&#39;2019-08-17T02:28:15.182340-04:00&#39;</span>,
+  <span class="s1">&#39;notes&#39;</span>: <span class="s1">&#39;&#39;</span>,
+  <span class="s1">&#39;pk&#39;</span>: <span class="m">23</span>,
+  <span class="s1">&#39;platform&#39;</span>: <span class="o">{</span> <span class="s1">&#39;created&#39;</span>: <span class="s1">&#39;2019-05-09T15:19:20.435716-04:00&#39;</span>,
+                <span class="s1">&#39;created_by&#39;</span>: <span class="s1">&#39;jdoe&#39;</span>,
+                <span class="s1">&#39;custom_fields&#39;</span>: <span class="o">{}</span>,
+                <span class="s1">&#39;data&#39;</span>: <span class="o">{}</span>,
+                <span class="s1">&#39;manufacturer&#39;</span>: <span class="s1">&#39;10X&#39;</span>,
+                <span class="s1">&#39;model_name&#39;</span>: <span class="s1">&#39;Platform&#39;</span>,
+                <span class="s1">&#39;modified&#39;</span>: <span class="s1">&#39;2019-05-09T15:19:20.435742-04:00&#39;</span>,
+                <span class="s1">&#39;notes&#39;</span>: <span class="s1">&#39;TODO: update Platform System and Version once Jamie &#39;</span>
+                         <span class="s1">&#39;gets exact specs.&#39;</span>,
+                <span class="s1">&#39;pk&#39;</span>: <span class="m">1</span>,
+                <span class="s1">&#39;slug&#39;</span>: <span class="s1">&#39;10X-HISEQ-3&#39;</span>,
+                <span class="s1">&#39;storage_url&#39;</span>: None,
+                <span class="s1">&#39;storage_usage&#39;</span>: <span class="m">0</span>,
+                <span class="s1">&#39;system&#39;</span>: <span class="s1">&#39;HISEQ&#39;</span>,
+                <span class="s1">&#39;tags&#39;</span>: <span class="o">[]</span>,
+                <span class="s1">&#39;uuid&#39;</span>: <span class="s1">&#39;46c12331-0546-4af0-bcb7-009a5033d346&#39;</span>,
+                <span class="s1">&#39;version&#39;</span>: <span class="s1">&#39;3&#39;</span><span class="o">}</span>,
+  <span class="s1">&#39;projects&#39;</span>: <span class="o">[</span> <span class="o">{</span> <span class="s1">&#39;analyst&#39;</span>: None,
+                  <span class="s1">&#39;coordinator&#39;</span>: None,
+                  <span class="s1">&#39;created&#39;</span>: <span class="s1">&#39;2019-05-09T14:41:14.585604-04:00&#39;</span>,
+                  <span class="s1">&#39;created_by&#39;</span>: <span class="s1">&#39;jdoe&#39;</span>,
+                  <span class="s1">&#39;custom_fields&#39;</span>: <span class="o">{}</span>,
+                  <span class="s1">&#39;data&#39;</span>: <span class="o">{}</span>,
+                  <span class="s1">&#39;description&#39;</span>: None,
+                  <span class="s1">&#39;group&#39;</span>: None,
+                  <span class="s1">&#39;model_name&#39;</span>: <span class="s1">&#39;Project&#39;</span>,
+                  <span class="s1">&#39;modified&#39;</span>: <span class="s1">&#39;2019-05-09T16:39:32.637903-04:00&#39;</span>,
+                  <span class="s1">&#39;notes&#39;</span>: None,
+                  <span class="s1">&#39;owner&#39;</span>: None,
+                  <span class="s1">&#39;pk&#39;</span>: <span class="m">1</span>,
+                  <span class="s1">&#39;principal_investigator&#39;</span>: None,
+                  <span class="s1">&#39;short_title&#39;</span>: <span class="s1">&#39;spectrum--&#39;</span>,
+                  <span class="s1">&#39;storage_url&#39;</span>: <span class="s1">&#39;/isabl_data_lake/projects/1&#39;</span>,
+                  <span class="s1">&#39;storage_usage&#39;</span>: <span class="m">0</span>,
+                  <span class="s1">&#39;tags&#39;</span>: <span class="o">[]</span>,
+                  <span class="s1">&#39;title&#39;</span>: <span class="s1">&#39;SPECTRUM&#39;</span>,
+                  <span class="s1">&#39;uuid&#39;</span>: <span class="s1">&#39;49e0dd4f-36ea-49a9-9aa9-066617e54f12&#39;</span><span class="o">}]</span>,
+  <span class="s1">&#39;raw_data&#39;</span>: <span class="o">[</span> <span class="o">{</span> <span class="s1">&#39;file_data&#39;</span>: <span class="o">{}</span>,
+                  <span class="s1">&#39;file_type&#39;</span>: <span class="s1">&#39;FASTQ_I1&#39;</span>,
+                  <span class="s1">&#39;file_url&#39;</span>: <span class="s1">&#39;/isabl_data_lake/experiments/00/23/23/data/SHAH_H000004_T01_01_scWT01_622abe966ebbd935_ROVCD45POS_IGO_09443_B_1_S1_L001_I1_001.fastq.gz&#39;</span>,
+                  <span class="s1">&#39;hash_method&#39;</span>: <span class="s1">&#39;os.path.getsize&#39;</span>,
+                  <span class="s1">&#39;hash_value&#39;</span>: <span class="s1">&#39;394574965&#39;</span><span class="o">}</span>,
+                <span class="o">{</span> <span class="s1">&#39;file_data&#39;</span>: <span class="o">{}</span>,
+                  <span class="s1">&#39;file_type&#39;</span>: <span class="s1">&#39;FASTQ_R2&#39;</span>,
+                  <span class="s1">&#39;file_url&#39;</span>: <span class="s1">&#39;/isabl_data_lake/experiments/00/23/23/data/SHAH_H000004_T01_01_scWT01_622abe966ebbd935_ROVCD45POS_IGO_09443_B_1_S1_L001_R2_001.fastq.gz&#39;</span>,
+                  <span class="s1">&#39;hash_method&#39;</span>: <span class="s1">&#39;os.path.getsize&#39;</span>,
+                  <span class="s1">&#39;hash_value&#39;</span>: <span class="s1">&#39;2956111208&#39;</span><span class="o">}</span>,
+                <span class="o">{</span> <span class="s1">&#39;file_data&#39;</span>: <span class="o">{}</span>,
+                  <span class="s1">&#39;file_type&#39;</span>: <span class="s1">&#39;FASTQ_R1&#39;</span>,
+                  <span class="s1">&#39;file_url&#39;</span>: <span class="s1">&#39;/isabl_data_lake/experiments/00/23/23/data/SHAH_H000004_T01_01_scWT01_622abe966ebbd935_ROVCD45POS_IGO_09443_B_1_S1_L001_R1_001.fastq.gz&#39;</span>,
+                  <span class="s1">&#39;hash_method&#39;</span>: <span class="s1">&#39;os.path.getsize&#39;</span>,
+                  <span class="s1">&#39;hash_value&#39;</span>: <span class="s1">&#39;1289884414&#39;</span><span class="o">}</span>,
+                <span class="o">{</span> <span class="s1">&#39;file_data&#39;</span>: <span class="o">{}</span>,
+                  <span class="s1">&#39;file_type&#39;</span>: <span class="s1">&#39;FASTQ_I1&#39;</span>,
+                  <span class="s1">&#39;file_url&#39;</span>: <span class="s1">&#39;/isabl_data_lake/experiments/00/23/23/data/SHAH_H000004_T01_01_scWT01_622abe966ebbd935_ROVCD45POS_IGO_09443_B_1_S1_L002_I1_001.fastq.gz&#39;</span>,
+                  <span class="s1">&#39;hash_method&#39;</span>: <span class="s1">&#39;os.path.getsize&#39;</span>,
+                  <span class="s1">&#39;hash_value&#39;</span>: <span class="s1">&#39;393042999&#39;</span><span class="o">}</span>,
+                <span class="o">{</span> <span class="s1">&#39;file_data&#39;</span>: <span class="o">{}</span>,
+                  <span class="s1">&#39;file_type&#39;</span>: <span class="s1">&#39;FASTQ_R2&#39;</span>,
+                  <span class="s1">&#39;file_url&#39;</span>: <span class="s1">&#39;/isabl_data_lake/experiments/00/23/23/data/SHAH_H000004_T01_01_scWT01_622abe966ebbd935_ROVCD45POS_IGO_09443_B_1_S1_L002_R2_001.fastq.gz&#39;</span>,
+                  <span class="s1">&#39;hash_method&#39;</span>: <span class="s1">&#39;os.path.getsize&#39;</span>,
+                  <span class="s1">&#39;hash_value&#39;</span>: <span class="s1">&#39;2943172695&#39;</span><span class="o">}</span>,
+                <span class="o">{</span> <span class="s1">&#39;file_data&#39;</span>: <span class="o">{}</span>,
+                  <span class="s1">&#39;file_type&#39;</span>: <span class="s1">&#39;FASTQ_R1&#39;</span>,
+                  <span class="s1">&#39;file_url&#39;</span>: <span class="s1">&#39;/isabl_data_lake/experiments/00/23/23/data/SHAH_H000004_T01_01_scWT01_622abe966ebbd935_ROVCD45POS_IGO_09443_B_1_S1_L002_R1_001.fastq.gz&#39;</span>,
+                  <span class="s1">&#39;hash_method&#39;</span>: <span class="s1">&#39;os.path.getsize&#39;</span>,
+                  <span class="s1">&#39;hash_value&#39;</span>: <span class="s1">&#39;1283130062&#39;</span><span class="o">}]</span>,
+  <span class="s1">&#39;results&#39;</span>: <span class="o">[</span> <span class="o">{</span> <span class="s1">&#39;analyses&#39;</span>: <span class="o">[]</span>,
+                 <span class="s1">&#39;application&#39;</span>: <span class="o">{</span><span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;SCRNA&#39;</span>, <span class="s1">&#39;pk&#39;</span>: <span class="m">1</span>, <span class="s1">&#39;version&#39;</span>: <span class="s1">&#39;1.0.3&#39;</span><span class="o">}</span>,
+                 <span class="s1">&#39;pk&#39;</span>: <span class="m">1</span>,
+                 <span class="s1">&#39;references&#39;</span>: <span class="o">[]</span>,
+                 <span class="s1">&#39;results&#39;</span>: <span class="o">{</span> <span class="s1">&#39;cell_types&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/report/cell_types.png&#39;</span>,
+                              <span class="s1">&#39;command_err&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/head_job.err&#39;</span>,
+                              <span class="s1">&#39;command_log&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/head_job.log&#39;</span>,
+                              <span class="s1">&#39;command_script&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/head_job.sh&#39;</span>,
+                              <span class="s1">&#39;mito&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/report/mito.png&#39;</span>,
+                              <span class="s1">&#39;ribo&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/report/ribo.png&#39;</span>,
+                              <span class="s1">&#39;settings&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/settings.yaml&#39;</span>,
+                              <span class="s1">&#39;summary&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/report/summary.html&#39;</span>,
+                              <span class="s1">&#39;total_counts_v_features_by_counts&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/report/total_counts_v_features_by_counts.png&#39;</span>,
+                              <span class="s1">&#39;tsne_by_cell_type&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/report/tsne_by_cell_type.png&#39;</span>,
+                              <span class="s1">&#39;umap_by_cell_type&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/report/umap_by_cell_type.png&#39;</span>,
+                              <span class="s1">&#39;umi&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1/report/umi.png&#39;</span><span class="o">}</span>,
+                 <span class="s1">&#39;run_time&#39;</span>: <span class="m">39</span>.5089701333333,
+                 <span class="s1">&#39;status&#39;</span>: <span class="s1">&#39;SUCCEEDED&#39;</span>,
+                 <span class="s1">&#39;storage_url&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/01/1&#39;</span>,
+                 <span class="s1">&#39;targets&#39;</span>: <span class="o">[</span> <span class="o">{</span> <span class="s1">&#39;pk&#39;</span>: <span class="m">23</span>,
+                                <span class="s1">&#39;system_id&#39;</span>: <span class="s1">&#39;SHAH_H000004_T01_01_scWT01&#39;</span><span class="o">}]</span>,
+                 <span class="s1">&#39;wait_time&#39;</span>: None<span class="o">}</span>,
+               <span class="o">{</span> <span class="s1">&#39;analyses&#39;</span>: <span class="o">[]</span>,
+                 <span class="s1">&#39;application&#39;</span>: <span class="o">{</span> <span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;CELLRANGER&#39;</span>,
+                                  <span class="s1">&#39;pk&#39;</span>: <span class="m">3</span>,
+                                  <span class="s1">&#39;version&#39;</span>: <span class="s1">&#39;3.0.2&#39;</span><span class="o">}</span>,
+                 <span class="s1">&#39;pk&#39;</span>: <span class="m">3</span>,
+                 <span class="s1">&#39;references&#39;</span>: <span class="o">[]</span>,
+                 <span class="s1">&#39;results&#39;</span>: <span class="o">{</span> <span class="s1">&#39;command_err&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/03/3/head_job.err&#39;</span>,
+                              <span class="s1">&#39;command_log&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/03/3/head_job.log&#39;</span>,
+                              <span class="s1">&#39;command_script&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/03/3/head_job.sh&#39;</span>,
+                              <span class="s1">&#39;settings&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/03/3/settings.yaml&#39;</span>,
+                              <span class="s1">&#39;web_summary&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/03/3/ROVCD45POS_IGO_09443_B_1/outs/web_summary.html&#39;</span><span class="o">}</span>,
+                 <span class="s1">&#39;run_time&#39;</span>: <span class="m">295</span>.050850666667,
+                 <span class="s1">&#39;status&#39;</span>: <span class="s1">&#39;SUCCEEDED&#39;</span>,
+                 <span class="s1">&#39;storage_url&#39;</span>: <span class="s1">&#39;/isabl_data_lake/analyses/00/03/3&#39;</span>,
+                 <span class="s1">&#39;targets&#39;</span>: <span class="o">[</span> <span class="o">{</span> <span class="s1">&#39;pk&#39;</span>: <span class="m">23</span>,
+                                <span class="s1">&#39;system_id&#39;</span>: <span class="s1">&#39;SHAH_H000004_T01_01_scWT01&#39;</span><span class="o">}]</span>,
+                 <span class="s1">&#39;wait_time&#39;</span>: None<span class="o">}]</span>,
+  <span class="s1">&#39;sample&#39;</span>: <span class="o">{</span> <span class="s1">&#39;category&#39;</span>: <span class="s1">&#39;TUMOR&#39;</span>,
+              <span class="s1">&#39;collection_days&#39;</span>: None,
+              <span class="s1">&#39;created&#39;</span>: <span class="s1">&#39;2019-05-09T16:06:48.539831-04:00&#39;</span>,
+              <span class="s1">&#39;created_by&#39;</span>: <span class="s1">&#39;jdoe&#39;</span>,
+              <span class="s1">&#39;custom_fields&#39;</span>: <span class="o">{}</span>,
+              <span class="s1">&#39;data&#39;</span>: <span class="o">{}</span>,
+              <span class="s1">&#39;disease&#39;</span>: <span class="o">{</span> <span class="s1">&#39;acronym&#39;</span>: <span class="s1">&#39;HGSOC&#39;</span>,
+                           <span class="s1">&#39;created&#39;</span>: <span class="s1">&#39;2019-05-09T14:44:00.073157-04:00&#39;</span>,
+                           <span class="s1">&#39;created_by&#39;</span>: <span class="s1">&#39;jdoe&#39;</span>,
+                           <span class="s1">&#39;custom_fields&#39;</span>: <span class="o">{}</span>,
+                           <span class="s1">&#39;data&#39;</span>: <span class="o">{}</span>,
+                           <span class="s1">&#39;model_name&#39;</span>: <span class="s1">&#39;Disease&#39;</span>,
+                           <span class="s1">&#39;modified&#39;</span>: <span class="s1">&#39;2019-05-09T14:44:00.073189-04:00&#39;</span>,
+                           <span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;High Grade Serous Ovarian Cancer&#39;</span>,
+                           <span class="s1">&#39;notes&#39;</span>: <span class="s1">&#39;&#39;</span>,
+                           <span class="s1">&#39;pk&#39;</span>: <span class="m">1</span>,
+                           <span class="s1">&#39;slug&#39;</span>: <span class="s1">&#39;High Grade Serous Ovarian Cancer (HGSOC)&#39;</span>,
+                           <span class="s1">&#39;storage_url&#39;</span>: None,
+                           <span class="s1">&#39;storage_usage&#39;</span>: <span class="m">0</span>,
+                           <span class="s1">&#39;tags&#39;</span>: <span class="o">[]</span>,
+                           <span class="s1">&#39;uuid&#39;</span>: <span class="s1">&#39;ec8a7ab4-e59a-45db-8e7d-1a28413d34aa&#39;</span><span class="o">}</span>,
+              <span class="s1">&#39;identifier&#39;</span>: <span class="s1">&#39;ROVCD45POS_IGO_09443_B_1&#39;</span>,
+              <span class="s1">&#39;individual&#39;</span>: <span class="o">{</span> <span class="s1">&#39;birth_year&#39;</span>: <span class="m">1800</span>,
+                              <span class="s1">&#39;center&#39;</span>: <span class="o">{</span> <span class="s1">&#39;acronym&#39;</span>: <span class="s1">&#39;IGO&#39;</span>,
+                                          <span class="s1">&#39;created&#39;</span>: <span class="s1">&#39;2019-05-09T14:43:13.359533-04:00&#39;</span>,
+                                          <span class="s1">&#39;created_by&#39;</span>: <span class="s1">&#39;jdoe&#39;</span>,
+                                          <span class="s1">&#39;custom_fields&#39;</span>: <span class="o">{}</span>,
+                                          <span class="s1">&#39;data&#39;</span>: <span class="o">{}</span>,
+                                          <span class="s1">&#39;model_name&#39;</span>: <span class="s1">&#39;Center&#39;</span>,
+                                          <span class="s1">&#39;modified&#39;</span>: <span class="s1">&#39;2019-05-09T14:43:13.359558-04:00&#39;</span>,
+                                          <span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;MSKCC IGO&#39;</span>,
+                                          <span class="s1">&#39;notes&#39;</span>: <span class="s1">&#39;&#39;</span>,
+                                          <span class="s1">&#39;pk&#39;</span>: <span class="m">1</span>,
+                                          <span class="s1">&#39;slug&#39;</span>: <span class="s1">&#39;MSKCC IGO (IGO)&#39;</span>,
+                                          <span class="s1">&#39;storage_url&#39;</span>: None,
+                                          <span class="s1">&#39;storage_usage&#39;</span>: <span class="m">0</span>,
+                                          <span class="s1">&#39;tags&#39;</span>: <span class="o">[]</span>,
+                                          <span class="s1">&#39;uuid&#39;</span>: <span class="s1">&#39;c6fc7946-cade-4f09-9f36-82a662bf1ac0&#39;</span><span class="o">}</span>,
+                              <span class="s1">&#39;created&#39;</span>: <span class="s1">&#39;2019-05-09T16:06:48.533761-04:00&#39;</span>,
+                              <span class="s1">&#39;created_by&#39;</span>: <span class="s1">&#39;jdoe&#39;</span>,
+                              <span class="s1">&#39;custom_fields&#39;</span>: <span class="o">{}</span>,
+                              <span class="s1">&#39;data&#39;</span>: <span class="o">{}</span>,
+                              <span class="s1">&#39;gender&#39;</span>: <span class="s1">&#39;FEMALE&#39;</span>,
+                              <span class="s1">&#39;identifier&#39;</span>: <span class="s1">&#39;SPECTRUM-OV-002&#39;</span>,
+                              <span class="s1">&#39;model_name&#39;</span>: <span class="s1">&#39;Individual&#39;</span>,
+                              <span class="s1">&#39;modified&#39;</span>: <span class="s1">&#39;2019-10-22T17:46:54.958559-04:00&#39;</span>,
+                              <span class="s1">&#39;notes&#39;</span>: <span class="s1">&#39;&#39;</span>,
+                              <span class="s1">&#39;pk&#39;</span>: <span class="m">4</span>,
+                              <span class="s1">&#39;species&#39;</span>: <span class="s1">&#39;HUMAN&#39;</span>,
+                              <span class="s1">&#39;storage_url&#39;</span>: None,
+                              <span class="s1">&#39;storage_usage&#39;</span>: <span class="m">0</span>,
+                              <span class="s1">&#39;submission&#39;</span>: <span class="m">1</span>,
+                              <span class="s1">&#39;system_id&#39;</span>: <span class="s1">&#39;SHAH_H000004&#39;</span>,
+                              <span class="s1">&#39;tags&#39;</span>: <span class="o">[{</span><span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;P-0039615&#39;</span>, <span class="s1">&#39;pk&#39;</span>: <span class="m">1</span><span class="o">}]</span>,
+                              <span class="s1">&#39;uuid&#39;</span>: <span class="s1">&#39;211f902b-852c-4ae3-a8f0-1d50577bd39d&#39;</span><span class="o">}</span>,
+              <span class="s1">&#39;model_name&#39;</span>: <span class="s1">&#39;Sample&#39;</span>,
+              <span class="s1">&#39;modified&#39;</span>: <span class="s1">&#39;2019-05-09T16:06:48.561310-04:00&#39;</span>,
+              <span class="s1">&#39;notes&#39;</span>: None,
+              <span class="s1">&#39;pk&#39;</span>: <span class="m">23</span>,
+              <span class="s1">&#39;storage_url&#39;</span>: None,
+              <span class="s1">&#39;storage_usage&#39;</span>: <span class="m">0</span>,
+              <span class="s1">&#39;submission&#39;</span>: <span class="m">1</span>,
+              <span class="s1">&#39;system_id&#39;</span>: <span class="s1">&#39;SHAH_H000004_T01&#39;</span>,
+              <span class="s1">&#39;tags&#39;</span>: <span class="o">[]</span>,
+              <span class="s1">&#39;uuid&#39;</span>: <span class="s1">&#39;60c5c980-5289-4047-9a3f-a15871a0e3e9&#39;</span><span class="o">}</span>,
+  <span class="s1">&#39;storage_url&#39;</span>: <span class="s1">&#39;/isabl_data_lake/experiments/00/23/23&#39;</span>,
+  <span class="s1">&#39;storage_usage&#39;</span>: <span class="m">9259916343</span>,
+  <span class="s1">&#39;submission&#39;</span>: <span class="m">1</span>,
+  <span class="s1">&#39;system_id&#39;</span>: <span class="s1">&#39;SHAH_H000004_T01_01_scWT01&#39;</span>,
+  <span class="s1">&#39;tags&#39;</span>: <span class="o">[]</span>,
+  <span class="s1">&#39;technique&#39;</span>: <span class="o">{</span> <span class="s1">&#39;category&#39;</span>: <span class="s1">&#39;RNA&#39;</span>,
+                 <span class="s1">&#39;created&#39;</span>: <span class="s1">&#39;2019-05-09T15:11:49.717123-04:00&#39;</span>,
+                 <span class="s1">&#39;created_by&#39;</span>: <span class="s1">&#39;jdoe&#39;</span>,
+                 <span class="s1">&#39;custom_fields&#39;</span>: <span class="o">{}</span>,
+                 <span class="s1">&#39;data&#39;</span>: <span class="o">{}</span>,
+                 <span class="s1">&#39;method&#39;</span>: <span class="s1">&#39;WT&#39;</span>,
+                 <span class="s1">&#39;model_name&#39;</span>: <span class="s1">&#39;Technique&#39;</span>,
+                 <span class="s1">&#39;modified&#39;</span>: <span class="s1">&#39;2019-05-09T15:28:28.987206-04:00&#39;</span>,
+                 <span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;Single Cell RNA Seq&#39;</span>,
+                 <span class="s1">&#39;notes&#39;</span>: <span class="s1">&#39;&#39;</span>,
+                 <span class="s1">&#39;pk&#39;</span>: <span class="m">1</span>,
+                 <span class="s1">&#39;reference_data&#39;</span>: <span class="o">{}</span>,
+                 <span class="s1">&#39;slug&#39;</span>: <span class="s1">&#39;RNA|WT|Single Cell RNA Seq&#39;</span>,
+                 <span class="s1">&#39;storage_url&#39;</span>: None,
+                 <span class="s1">&#39;storage_usage&#39;</span>: <span class="m">0</span>,
+                 <span class="s1">&#39;tags&#39;</span>: <span class="o">[]</span>,
+                 <span class="s1">&#39;uuid&#39;</span>: <span class="s1">&#39;85b5c983-9633-426e-9e70-a768cc6cac88&#39;</span><span class="o">}</span>,
+  <span class="s1">&#39;uuid&#39;</span>: <span class="s1">&#39;415912f4-ad06-4dae-8816-ab5e0e273f6f&#39;</span><span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="access-to-scrnaseq-data">
+<h2><span class="section-number">3.3.2. </span>Access to scRNASeq Data<a class="headerlink" href="#access-to-scrnaseq-data" title="Permalink to this headline">¶</a></h2>
+<p>The following set of example code snippets may be used for extracting Single Cell scRNASeq data from isabl.</p>
+<p>Initialization.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">isabl_cli</span> <span class="k">as</span> <span class="nn">ii</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">pp</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">app_name</span>      <span class="o">=</span> <span class="s1">&#39;SCRNA&#39;</span>
+<span class="n">app_version</span>   <span class="o">=</span> <span class="s1">&#39;&lt;&lt;&lt; SOME VERSION, for example 1.0.3 &gt;&gt;&gt;&#39;</span>
+<span class="n">path_template</span> <span class="o">=</span> <span class="s2">&quot;.cache/</span><span class="si">{0}</span><span class="s2">/</span><span class="si">{0}</span><span class="s2">.rdata&quot;</span>
+</pre></div>
+</div>
+<p>Step 1: Identify the individual (patient) to get sample data for.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">individuals</span> <span class="o">=</span> <span class="n">ii</span><span class="o">.</span><span class="n">get_instances</span><span class="p">(</span><span class="s1">&#39;individuals&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">individual</span> <span class="ow">in</span> <span class="n">individuals</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ID: </span><span class="si">{individual[&#39;identifier&#39;]}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ID: SPECTRUM-OV-002
+ID: SPECTRUM-OV-003
+ID: SPECTRUM-OV-007
+ID: SPECTRUM-OV-014
+ID: SPECTRUM-OV-008
+...
+</pre></div>
+</div>
+<p>Step 2: Get a list of samples for a specific individual (patient).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">individual_id</span> <span class="o">=</span> <span class="s1">&#39;&lt;&lt;&lt; SOME ID THAT YOU GOT IN PREVIOUS STEP &gt;&gt;&gt;&#39;</span>
+
+<span class="n">samples_for_query</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">ii</span><span class="o">.</span><span class="n">get_instances</span><span class="p">(</span><span class="s1">&#39;samples&#39;</span><span class="p">,</span> <span class="n">individual__identifier</span><span class="o">=</span><span class="n">individual_id</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+   <span class="n">samples_for_query</span> <span class="o">+=</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;identifier&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span>
+
+<span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">samples_for_query</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Retrieving <span class="m">4</span> from samples API endpoint...
+ROVCD45POS_IGO_09443_B_1,ROVCD45NEG_IGO_09443_B_2,OMENTCD45POS_IGO_09443_B_3,Sample_002
+</pre></div>
+</div>
+<p>Step 3: Identify a list of experiment objects for the given samples.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">experiments</span> <span class="o">=</span> <span class="n">ii</span><span class="o">.</span><span class="n">get_instances</span><span class="p">(</span><span class="s1">&#39;experiments&#39;</span><span class="p">,</span> <span class="n">sample__identifier__in</span><span class="o">=</span><span class="n">samples_for_query</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">experiments</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Retrieving <span class="m">4</span> from experiments API endpoint...
+<span class="o">[</span> Experiment<span class="o">(</span>SHAH_H000004_T01_01_scWT01<span class="o">)</span>,
+  Experiment<span class="o">(</span>SHAH_H000004_T02_01_scWT01<span class="o">)</span>,
+  Experiment<span class="o">(</span>SHAH_H000004_T03_01_scWT01<span class="o">)</span>, Experiment<span class="o">(</span>SHAH_H000004_N01_01_WG01<span class="o">)]</span>
+</pre></div>
+</div>
+<p>Step 4: For each identified experiment, traverse results for pipeline runs that succeeded. Then construct file paths to retrieve the latest R data file path: {storage_url}/.cache/{sample_id}/{sample_id}.rdata</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">experiment</span> <span class="ow">in</span> <span class="n">experiments</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">analysis</span> <span class="ow">in</span> <span class="n">experiment</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;application&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>             <span class="o">==</span> <span class="n">app_name</span> \
+                <span class="ow">and</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;application&#39;</span><span class="p">][</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">app_version</span> \
+                <span class="ow">and</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span>                 <span class="o">==</span> <span class="s1">&#39;SUCCEEDED&#39;</span><span class="p">:</span>
+           <span class="n">rdata</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;storage_url&#39;</span><span class="p">],</span> <span class="n">path_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">experiment</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">][</span><span class="s1">&#39;identifier&#39;</span><span class="p">]))</span>
+           <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{analysis[&#39;pk&#39;]}</span><span class="s2"> - </span><span class="si">{analysis[&#39;application&#39;][&#39;name&#39;]}</span><span class="s2"> - </span><span class="si">{analysis[&#39;application&#39;][&#39;version&#39;]}</span><span class="s2"> - </span><span class="si">{rdata}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span><span class="s1">&#39;1 - SCRNA - 1.0.3 - &#39;</span>
+ <span class="s1">&#39;.../analyses/00/01/1/.cache/ROVCD45POS_IGO_09443_B_1/ROVCD45POS_IGO_09443_B_1.rdata&#39;</span><span class="o">)</span>
+<span class="o">(</span><span class="s1">&#39;60 - SCRNA - 1.0.3 - &#39;</span>
+ <span class="s1">&#39;.../analyses/00/60/60/.cache/ROVCD45NEG_IGO_09443_B_2/ROVCD45NEG_IGO_09443_B_2.rdata&#39;</span><span class="o">)</span>
+<span class="o">(</span><span class="s1">&#39;108 - SCRNA - 1.0.3 - &#39;</span>
+ <span class="s1">&#39;/.../analyses/01/08/108/.cache/OMENTCD45POS_IGO_09443_B_3/OMENTCD45POS_IGO_09443_B_3.rdata&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Step 5: Get results paths to individual level analyses.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">analyses</span> <span class="o">=</span> <span class="n">ii</span><span class="o">.</span><span class="n">get_instances</span><span class="p">(</span><span class="s2">&quot;analyses&quot;</span><span class="p">,</span> <span class="n">application__name</span><span class="o">=</span><span class="s2">&quot;SCRNA Individual Application&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">anal</span> <span class="ow">in</span> <span class="n">analyses</span><span class="p">:</span>
+   <span class="k">if</span> <span class="s1">&#39;individual_level_analysis&#39;</span> <span class="ow">in</span> <span class="n">anal</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">anal</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;storage_url&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Retrieving <span class="m">27</span> from analyses API endpoint...
+<span class="s1">&#39;/.../analyses/03/75/375&#39;</span>
+<span class="s1">&#39;/.../analyses/07/38/738&#39;</span>
+<span class="s1">&#39;/.../analyses/07/39/739&#39;</span>
+ ...
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">isabl_api</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">2. Assumptions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="user.html">3. End User</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dataCollection.html">3.1. Data Collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html">3.2. CLI Access to Data</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.3. API Access to Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">3.3.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#access-to-scrnaseq-data">3.3.2. Access to scRNASeq Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">3.4. Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="releaseNotes.html">3.5. Release Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">4. Developer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developerOperations.html">5. Developer Operations</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="user.html"><span class="section-number">3. </span>End User</a><ul>
+      <li>Previous: <a href="cli.html" title="previous chapter"><span class="section-number">3.2. </span>CLI Access to Data</a></li>
+      <li>Next: <a href="troubleshooting.html" title="next chapter"><span class="section-number">3.4. </span>Troubleshooting</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Shah Lab, MSKCC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

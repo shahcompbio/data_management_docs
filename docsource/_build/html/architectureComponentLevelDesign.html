@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>4.4. Architecture - Component Level Design &#8212; isabl_api 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4.5. Formal Specs" href="formalSpecs.html" />
+    <link rel="prev" title="4.3. Architecture - High Level Design" href="architectureSystemLevelDesign.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="architecture-component-level-design">
+<h1><span class="section-number">4.4. </span>Architecture - Component Level Design<a class="headerlink" href="#architecture-component-level-design" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="architecture-and-dependencies">
+<h2><span class="section-number">4.4.1. </span>Architecture and Dependencies:<a class="headerlink" href="#architecture-and-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>This section describes the components that make up the Isabl data lake sub-system that sits in the larger MSK system described in the section <a class="reference external" href="architectureSystemLevelDesign.html">Architecture - High Level Design</a>.</p>
+<div class="figure align-default" id="id1">
+<span id="fig-main"></span><img alt="_images/isablComponentLevel.png" src="_images/isablComponentLevel.png" />
+<p class="caption"><span class="caption-text">Isabl dependency diagram.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<ol class="arabic simple">
+<li><p>The <strong>Data Lake</strong> is a file system where all file data is stored with just enough design and data structure needed to find/locate the data. The design and structure required for this function is built into the <strong>Isabl (ingest) API</strong>. In essence, the data is stored in a manner that does not presume the type of questions that might need to be answered by the data through queries made on the data in the future. The data in the lake is heterogeneous by nature, but it is critical that each type of data is well defined (documented unambiguously), identifiable and addressable (down to every data element), machine readable, well formatted (for ease of egest) and validated in order to allow for automatic egest. These factors are the responsibility of the Isabl <strong>Apps</strong> that write data into the Data Lake. Isabl Apps are executed through the <strong>CLI</strong>, a command line interface to the ingest API. The CLI may be installed on any compute unit that has network access to the Isabl ingest API.  The ingest API, CLI and Apps form the primary components of the isabl system.</p></li>
+<li><p><strong>Egest</strong> (secondary) data stores (a.k.a data marts) are built as needed for answering specific questions through queries made on the data. They may be built on demand and for specific subsets of the data (like sequence, blood, imaging etc). At the very least, an ElasticSearch store should exist to support basic querying and visualization.</p></li>
+<li><p>All data will be made available to the end-user through <strong>REST APIs</strong> and any web <strong>Browser</strong>.</p></li>
+<li><p>Compute may be any software process that needs to access data through APIs. The Browser, Isabl apps (that are executed via the CLI), <strong>ETL</strong> processes etc. are all examples of compute units that will utilize the APIs.</p></li>
+</ol>
+</div>
+<div class="section" id="design-features">
+<h2><span class="section-number">4.4.2. </span>Design Features:<a class="headerlink" href="#design-features" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>The system separates the data management concern (of data in the lake) from the analysis pipeline execution concern by providing a pluggable <strong>CLI</strong> through which analysis pipelines can be integrated into the system.</p></li>
+<li><p>The system also separates out the data query and visualization concerns through the egest components. The postgres database is only used to locate data in the lake and view summary statistics for the lake.</p></li>
+<li><p>Metadata is stored on the lake and made accessible via egest stores.</p></li>
+<li><p>The system supports the standardization of input and output data formats by separating out the pre and post processing steps like validation and data format converion from the main analysis code through an <strong>App</strong> code wrapper infrastructure. Tools like validators and converters can be standardized and made available to Apps through this infrastructure. The system therefore allows analysts and scientists to construct the pipelines, and engineers to take these pipelines and standardize the way in which they interact with the Data Lake. An important aspect of standardization is reduction of information entropy. This makes downstream comparisons a lot easier.</p></li>
+<li><p>The system provides a stateful analysis process that includes intermediate states to allow scientists to provide feedback in order to complete an analysis.</p></li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">isabl_api</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">2. Assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">3. End User</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="developer.html">4. Developer</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="functionalRequirements.html">4.1. Functional Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nonFunctionalRequirements.html">4.2. NonFunctional Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architectureSystemLevelDesign.html">4.3. Architecture - High Level Design</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.4. Architecture - Component Level Design</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#architecture-and-dependencies">4.4.1. Architecture and Dependencies:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#design-features">4.4.2. Design Features:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="formalSpecs.html">4.5. Formal Specs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemRequirements.html">4.6. System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">4.7. Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configurationDetails.html">4.8. Configuration Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html">4.9. Maintenance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="knownIssues.html">4.10. Known Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="todos.html">4.11. TODOs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html">4.12. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keywords.html">4.13. Keywords</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developerOperations.html">5. Developer Operations</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="developer.html"><span class="section-number">4. </span>Developer</a><ul>
+      <li>Previous: <a href="architectureSystemLevelDesign.html" title="previous chapter"><span class="section-number">4.3. </span>Architecture - High Level Design</a></li>
+      <li>Next: <a href="formalSpecs.html" title="next chapter"><span class="section-number">4.5. </span>Formal Specs</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Shah Lab, MSKCC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/architectureComponentLevelDesign.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

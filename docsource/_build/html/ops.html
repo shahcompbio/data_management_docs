@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>5.2. Operations &#8212; isabl_api 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="5.1. Performance Evaluation" href="performanceEvaluation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="operations">
+<h1><span class="section-number">5.2. </span>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h1>
+<p>This section contains a set of runbooks and workflows for various backend operations required by the system.</p>
+<div class="section" id="workflows">
+<h2><span class="section-number">5.2.1. </span>Workflows:<a class="headerlink" href="#workflows" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Molecular Data</strong></p></li>
+</ol>
+<p>This workflow details the process followed by Shah Lab for collecting and analysing blood and soft tissue samples using bioinformatics pipelines.</p>
+<p>1.1 Specimen Accessioning: Specimens are accessioned by various MSK groups. Shahlab accessions scDNA and scRNA specimens. During scDNA and scRNA accessioning, specimen and aliquot meta-data is entered into eLabs and the specimens and aliquots are placed in storage. This step is conducted by a Shah Lab lab tech. Processing of other specimen types is not detailed here as it is done by the other MSK groups.</p>
+<p>1.2 Sample Submission: Samples (or specimen) are submitted to IGO’s REX system for sequencing by a Shah Lab tech. Metadata associated with the submission process is stored in eLab for all sample types. This process is currently executed manually on request.</p>
+<p>1.3 Meta-data Extraction: Meta-data associated with specimens accessioned at other MSK labs is extracted from IDB and stored in a REDCap instance. The process is automated and executed periodically (24 hour period).</p>
+<p>1.4 Sequencing: Once the submitted samples have been sequenced by IGO, their sequenced data (typically fastqs) and IGO generated meta-data is placed on a shared drive that can be accessed via juno, MSK’s HPC cluster. This process is conducted by IGO and Shahlab is notified of the sequenced data via email.</p>
+<p>1.5 Data Import: Specimen meta-data and raw sequencing data (from IGO) is extracted from their respective sources, (REEDCap, eLab for meta-data, and an IGO shared drive for sequencing data and meta-data) merged and imported into the isabl data lake for final storage. The data import is done using isabl’s API through the back end and not the user interface. During import, Isabl creates storage locations for “Experiments” as defined by its data model. The data that is imported must follow strict schema (data type and version) validation in order to ensure a clean data lake. This process is currently executed manually on request by a Shah Lab data manager.</p>
+<p>1.6 Pipeline Execution: Various pipelines (or applications) may be executed on the imported data to yield “Analyses” as defined by the isabl data model. This process is currently executed manually by a Shah Lab developer on request.</p>
+<p>1.7 Access to Results: The sequenced data, meta-data and the results of the analyses may be accessed via Isabl’s user interface for spot checking and manual verification. Results may be accessible by anyone within MSK.</p>
+<p>1.8. Visualization: Result sets and associated meta-data is extracted from the data lake, transfored and loaded into an Elasticsearch instance. The Elasticsearch instance sources this data to a visualization engine that makes the data available through visual presentations. Visualizations may be viewable by anyone.</p>
+<ol class="arabic simple" start="2">
+<li><p><strong>Clinical Data</strong></p></li>
+</ol>
+<p>TBD</p>
+<ol class="arabic simple" start="3">
+<li><p><strong>Imaging Data</strong></p></li>
+</ol>
+<p>TBD</p>
+<p>The figure below illustrates this process for all types of molecular, clinical and imaging data being collected and analysed at Shah Lab.</p>
+<p>[In order for image data to cross the de-identification line, a tool called HoBBit developed by Thomas Fuch’s lab may be used.</p>
+<div class="figure align-default" id="id1">
+<span id="fig-main"></span><img alt="_images/shah_lab_data_flow.png" src="_images/shah_lab_data_flow.png" />
+<p class="caption"><span class="caption-text">Shah Lab Data Flow.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="routine-developer-operations">
+<h2><span class="section-number">5.2.2. </span>Routine Developer Operations:<a class="headerlink" href="#routine-developer-operations" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Deployment</strong> (See section on Installation)</p></li>
+<li><p><strong>Set up a new project in isabl</strong></p></li>
+<li><p><strong>Add user</strong></p></li>
+</ol>
+<p>Using admin UI, apply the following steps</p>
+<p>3.1. Use “Users” view to add the user (include email address), set Permissions to “active” and group to “Analyst” or “Engineer”</p>
+<p>3.2. Use “Email Addresses” view to add email address of user and mark the user as “verified” and “primary”.</p>
+<p>3.3. Use the “Tokens” view to get user token and give to user for API access.</p>
+<ol class="arabic simple" start="4">
+<li><p><strong>Import data</strong></p></li>
+</ol>
+<p>Check app.py documentation for each App. For example, see cellranger app</p>
+<p><a class="reference external" href="https://github.com/shahcompbio/isabl_apps/blob/master/isabl_apps/apps/shahcompbio/cellranger/app.py">https://github.com/shahcompbio/isabl_apps/blob/master/isabl_apps/apps/shahcompbio/cellranger/app.py</a></p>
+<ol class="arabic simple" start="5">
+<li><p><strong>Delete imported data</strong></p></li>
+</ol>
+<p>Sometimes it is necessary to delete imported data because the data was improperly imported, or for some other reason. The sequence of steps outlined below must be used to delete data.</p>
+<p>5.1 TAKE A DB BACKUP!</p>
+<p>5.2 Delete experiment dirs on data lake.</p>
+<p>5.3 Delete experiment, aliquot, sample and individual objects in that sequence in the database via admin UI.</p>
+<p>5.4 If there are results that were produced for the experiment through app runs, then delete the corresponding analysis dirs on the data lake, and the analysis objects on the database. This will require first deleting entries in the experiment-analysis many-many table via postgres. [Todo: Check if there are additional records/objects that need deleting. Also check if deleting analysis object from admin UI also cascade cleans records from the many-many table].</p>
+<ol class="arabic simple" start="6">
+<li><p><strong>Run analysis pipelines</strong> (apps)</p></li>
+</ol>
+<p>Check app.py documentation for each App. For example, see cellranger app</p>
+<p><a class="reference external" href="https://github.com/shahcompbio/isabl_apps/blob/master/isabl_apps/apps/shahcompbio/cellranger/app.py">https://github.com/shahcompbio/isabl_apps/blob/master/isabl_apps/apps/shahcompbio/cellranger/app.py</a></p>
+<ol class="arabic" start="7">
+<li><p><strong>View data</strong> (end-user)</p></li>
+<li><p><strong>Export data</strong></p></li>
+<li><p><strong>Integrate apps</strong></p></li>
+<li><p><strong>System maintenance</strong></p>
+<p>8.1. Periodic (monthly or quarterly) system maintenance involves testing upstream code updates from the following repos in staging and then applying the changes to production.</p>
+<p><a class="reference external" href="https://github.com/isabl-io/msk.git">https://github.com/isabl-io/msk.git</a> =&gt; <a class="reference external" href="https://github.com/shahcompbio/isabl_shahlab.git">https://github.com/shahcompbio/isabl_shahlab.git</a></p>
+<p><a class="reference external" href="https://github.com/isabl-io/api.git">https://github.com/isabl-io/api.git</a> =&gt; <a class="reference external" href="https://github.com/shahcompbio/isabl_api.git">https://github.com/shahcompbio/isabl_api.git</a></p>
+<p><a class="reference external" href="https://github.com/isabl-io/cli.git">https://github.com/isabl-io/cli.git</a> =&gt; <a class="reference external" href="https://github.com/shahcompbio/isabl_cli.git">https://github.com/shahcompbio/isabl_cli.git</a></p>
+<p>This must be done in the development environment. First merge changes from upstream into a branch on origin that is at the head of master, and then run unit tests. If there is no regression, proceed to the next step. Else, notify upstream team about regressions and repeat.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git fetch upstream master
+$ git merge upstream/master
+$ docker-compose build
+$ <span class="nb">echo</span> <span class="s2">&quot;isabl_api unit test command below&quot;</span>
+$ docker-compose run --rm --user root django pytest --ds example.settings --cov<span class="o">=</span>isabl_api
+$ <span class="nb">echo</span> <span class="s2">&quot;isabl_cli unit test command below&quot;</span>
+$ py.test tests/ --cov<span class="o">=</span>isabl_cli -s
+$ git push origin master
+</pre></div>
+</div>
+<p>8.2 In staging environment, check for changes made to upstream repos <a class="reference external" href="https://github.com/isabl-io/cookiecutter-api.git">https://github.com/isabl-io/cookiecutter-api.git</a> and <a class="reference external" href="https://github.com/isabl-io/msk.git">https://github.com/isabl-io/msk.git</a> and manually apply these changes to <a class="reference external" href="https://github.com/shahcompbio/isabl_shahlab.git">https://github.com/shahcompbio/isabl_shahlab.git</a>. Note that while isabl_shahlab.git was generated by executing cookiecutter-api.git and it is a sibling of msk.git. It will be useful to also get the upstream team to merge changes from the root repo <a class="reference external" href="https://github.com/pydanny/cookiecutter-django.git">https://github.com/pydanny/cookiecutter-django.git</a> occasiobnally into cookiecutter-api.git as there may be important security updates being made to this repo.</p>
+<blockquote>
+<div><p>TODO: In the future, it may be easier to deploy directly from the cookiecutter-django.git rather than maintaining the interemdiate repos.</p>
+</div></blockquote>
+<p>8.3. Copy production db into staging environment and run unit tests in staging environment to verify code and database integrity. If verification passed, merge branch into master.</p>
+<ol class="loweralpha simple">
+<li><p>Bring database backup from production into staging</p></li>
+<li><p>Pull upstream changes in master into staging</p></li>
+<li><p>Update db credentials in staging by applying prod credentials</p></li>
+<li><p>Rebuild django image only</p></li>
+<li><p>drop db, create db and import prod db</p></li>
+<li><p>restart container with logging and ensure migrations succeeeded</p></li>
+<li><p>test with admin ui to ensure data is viewable</p></li>
+<li><p>run unit tests</p></li>
+<li><p>update CLI</p></li>
+<li><p>test hello_world app integration</p></li>
+</ol>
+<p>8.4. Update production environment.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose -f production.yml down
+$ <span class="nb">cd</span> requirements/isabl_api
+$ git stash
+$ git pull origin master
+$ git stash pop
+$ <span class="nb">cd</span> ../..
+$ docker-compose -f production.yml build django
+$ docker-compose -f production.yml run --rm django python manage.py migrate
+$ docker-compose -f production.yml up -d
+</pre></div>
+</div>
+<p>8.5 Hot Fixes</p>
+</li>
+<li><p><strong>System monitoring</strong></p></li>
+<li><p><strong>System metrics</strong></p></li>
+<li><p><strong>Backup relational database</strong></p></li>
+</ol>
+<p>Create backup</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose -f production.yml <span class="nb">exec</span> postgres backup
+</pre></div>
+</div>
+<p>Verify by listing backups</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose -f production.yml <span class="nb">exec</span> postgres backups
+</pre></div>
+</div>
+<p>Copy backup to host dir after getting container id</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker ps
+
+$ docker cp &lt;postgres_container_id&gt;:/backups/&lt;backup_file_name&gt;.sql.gz /datadrive/backups
+</pre></div>
+</div>
+<p>Backup is copied to /datadrive/backups</p>
+<p>Add notes to /datadrive/backups/NOTES</p>
+<p>scp to local store</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~/dev/temp/isabl_prod_db_backups
+
+$ scp &lt;user&gt;@&lt;server_ip&gt;:/datadrive/backups/* .
+</pre></div>
+</div>
+<p>Reference: <a class="reference external" href="https://github.com/pydanny/cookiecutter-django/blob/master/docs/docker-postgres-backups.rst">https://github.com/pydanny/cookiecutter-django/blob/master/docs/docker-postgres-backups.rst</a></p>
+<ol class="arabic simple" start="14">
+<li><p><strong>Restore relational database</strong></p></li>
+</ol>
+<p>Verify backups</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose -f production.yml <span class="nb">exec</span> postgres backups
+</pre></div>
+</div>
+<p>Review notes in /datadrive/backups/NOTES to know which backup copy to use</p>
+<p>Restore</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose -f production.yml down
+
+$ docker-compose -f production.yml up -d postgres
+
+$ docker-compose -f production.yml <span class="nb">exec</span> postgres restore &lt;backup_file_name&gt;.sql.gz
+
+$ docker-compose -f production.yml down
+
+$ docker-compose -f production.yml up -d
+</pre></div>
+</div>
+<p>Reference: <a class="reference external" href="https://github.com/pydanny/cookiecutter-django/blob/master/docs/docker-postgres-backups.rst">https://github.com/pydanny/cookiecutter-django/blob/master/docs/docker-postgres-backups.rst</a></p>
+<ol class="arabic simple" start="15">
+<li><p><strong>Backup/Replicate/Archive data lake</strong></p></li>
+<li><p><strong>Restore data lake</strong></p></li>
+<li><p><strong>Verify if database and data lake are in synch</strong></p></li>
+<li><p><strong>Mirror data lake to cloud</strong></p></li>
+<li><p><strong>Generate PDF of schema</strong></p></li>
+</ol>
+<p>This assumes OS is Mac.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ brew install graphviz
+$ <span class="nb">cd</span> &lt;path to isabl_api&gt;
+$ pip install -r requirements.txt
+$ pip install pygraphviz --install-option<span class="o">=</span><span class="s2">&quot;--include-path=/usr/local/Cellar/graphviz/2.42.2/include/graphviz&quot;</span> --install-option<span class="o">=</span><span class="s2">&quot;--library-path=/usr/local/Cellar/graphviz/2.42.2/lib/graphviz&quot;</span>
+python manage.py graph_models isabl_api -o docs/schema.pdf -e -d -E --pygraphviz -R -X CustomField,BaseSampleModel,TimeStampedModel,BaseModel,BaseSlugModel,Preferences,BaseBioModel,Submission,User
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">isabl_api</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assumptions.html">2. Assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">3. End User</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">4. Developer</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="developerOperations.html">5. Developer Operations</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="performanceEvaluation.html">5.1. Performance Evaluation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.2. Operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#workflows">5.2.1. Workflows:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#routine-developer-operations">5.2.2. Routine Developer Operations:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="developerOperations.html"><span class="section-number">5. </span>Developer Operations</a><ul>
+      <li>Previous: <a href="performanceEvaluation.html" title="previous chapter"><span class="section-number">5.1. </span>Performance Evaluation</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Shah Lab, MSKCC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/ops.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
