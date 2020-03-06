@@ -552,6 +552,8 @@ $ openssl req -noout -modulus -in &lt;server_name&gt;.csr <span class="p">|</spa
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose -f production.yml build
 $ docker images
+$ docker-compose  run --rm django python manage.py collectstatic
+$ docker-compose -f production.yml run --rm django python manage.py check
 $ docker-compose -f production.yml run --rm django python manage.py migrate
 $ docker-compose -f production.yml run --rm django python manage.py showmigrations
 $ docker-compose -f production.yml run --rm django python manage.py createsuperuser
@@ -737,11 +739,12 @@ $ python setup.py install
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="configurationDetails.html">4.8. Configuration Details</a></li>
-<li class="toctree-l2"><a class="reference internal" href="maintenance.html">4.9. Maintenance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="knownIssues.html">4.10. Known Issues</a></li>
-<li class="toctree-l2"><a class="reference internal" href="todos.html">4.11. TODOs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="references.html">4.12. References</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keywords.html">4.13. Keywords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appDevelopment.html">4.9. Isabl Application Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html">4.10. Maintenance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="knownIssues.html">4.11. Known Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="todos.html">4.12. TODOs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html">4.13. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keywords.html">4.14. Keywords</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="developerOperations.html">5. Developer Operations</a></li>

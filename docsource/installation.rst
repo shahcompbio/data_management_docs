@@ -621,6 +621,8 @@ OR
 
     $ docker-compose -f production.yml build
     $ docker images
+    $ docker-compose  run --rm django python manage.py collectstatic
+    $ docker-compose -f production.yml run --rm django python manage.py check
     $ docker-compose -f production.yml run --rm django python manage.py migrate
     $ docker-compose -f production.yml run --rm django python manage.py showmigrations
     $ docker-compose -f production.yml run --rm django python manage.py createsuperuser

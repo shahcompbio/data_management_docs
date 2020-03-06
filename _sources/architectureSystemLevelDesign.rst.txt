@@ -6,6 +6,7 @@ This section describes the larger system that supports the storage and analysis 
 .. _fig-main:
 
 .. figure:: _static/shah_lab_data_flow.png
+    :align: center
 
     Shah Lab data storage and analysis system.
 

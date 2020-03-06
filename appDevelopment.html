@@ -37,9 +37,10 @@
 <p>Things to keep in mind when developing apps -</p>
 <p>Data is imported into the experiments directory of the data lake. This directory has group read permissions (drwxr-x—). i.e. Only admins can import data into the data lake. Developers who write data importers should not attempt to alter the umask of the experiment directory to include group write permissions.</p>
 <p>Applications can write results to the analysis directory that isabl creates for the application. Applications must only write to this directory.</p>
-<p>By design, isabl enforces these file permissions</p>
+<p>By design, isabl enforces these file permissions for regular isabl users.</p>
 <blockquote>
 <div><div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">/data-lake-root/ (not writable)</span>
+<span class="na">/data-lake-root/experiments/ (not writable)</span>
 <span class="na">/data-lake-root/analyses/ (not writable)</span>
 <span class="na">/data-lake-root/analyses/00/ (not writable)</span>
 <span class="na">/data-lake-root/analyses/00/01/ (this has to be writable by the group)</span>

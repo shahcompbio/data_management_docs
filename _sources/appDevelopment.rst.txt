@@ -8,11 +8,12 @@ Data is imported into the experiments directory of the data lake. This directory
 
 Applications can write results to the analysis directory that isabl creates for the application. Applications must only write to this directory.
 
-By design, isabl enforces these file permissions
+By design, isabl enforces these file permissions for regular isabl users.
 
     .. code-block:: cfg
 
         /data-lake-root/ (not writable)
+        /data-lake-root/experiments/ (not writable)
         /data-lake-root/analyses/ (not writable)
         /data-lake-root/analyses/00/ (not writable)
         /data-lake-root/analyses/00/01/ (this has to be writable by the group)
