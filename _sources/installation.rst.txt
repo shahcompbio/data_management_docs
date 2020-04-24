@@ -493,7 +493,7 @@ To unmount
 
 10. Generate TLS certificates.
 
-Create a config file for the CSR called req.conf with the following fields. Edit only the fields whose calues are encased in `<>`. For CN, provide an A NAME, also called a glue record. But a C NAME should also work. For <alternate_server_name> provide C NAMES, if any. Note that this configuration includes "Subject Alternate Name" or SAN. This is a required field for Chrome and Firefox browsers.
+Create a config file for the CSR called req.conf with the following fields. Edit only the fields whose values are encased in `<>`. For CN, provide an A NAME, also called a glue record. But a C NAME should also work. For <alternate_server_name> provide C NAMES, if any. Note that this configuration includes "Subject Alternate Name" or SAN. This is a required field for Chrome and Firefox browsers.
 
 
 .. code-block:: cfg
@@ -519,13 +519,13 @@ Create a config file for the CSR called req.conf with the following fields. Edit
 		DNS.3 = <alternate_server_name>
 		DNS.4 = <alternate_server_name>
 
-Generate the CSR using the configuration above on the server. Make sure to replace <server_name>. The result is the .csr (certificate signing request file) and .key (private key file).
+Generate the CSR using the configuration above on the server. Make sure to replace <server_name> in the command below. The result is the .csr (certificate signing request file) and .key (private key file).
 
 .. code-block:: bash
 
     $ openssl req -new -out <server_name>.csr -newkey rsa:2048 -nodes -sha256 -keyout <server_name>.key.temp -config req.conf
 
-Use the csr file to get a valid certificate file, in PEM format, from a Certificate Authority. At MSKCC, make a request to IT using the MyITApp website.
+Use the csr file to get a valid certificate file, in PEM format, from a Certificate Authority. At MSKCC, make a request to IT using the MyITApp website and explicitly request a certificate for nginx.
 
 Once the certificate is received, verify that it is valid by running the command below. The output should contain fields from req.conf above.
 
