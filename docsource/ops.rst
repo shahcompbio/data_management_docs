@@ -92,7 +92,43 @@ Check app.py documentation for each App. For example, see cellranger app
 
 https://github.com/shahcompbio/isabl_apps/blob/master/isabl_apps/apps/shahcompbio/cellranger/app.py
 
-Applications may be executed by any regular isabl user or an admin. If a regular user executes an application, the application enters a "FINISHED" state on successful completion. At this stage, the results are group writable. Using the isabl bot user, an admin user must then execute the isabl cli "process-finished" command in order to change the state of the execution from "FINISHED" to "SUCCEEDED". This may be done on a nightly schedule for all executions. In the "SUCCEEDED" state, the results files are copied over and their ownership is changed to the isabl bot user. The permissions of the files are also changed to disallow group writes. This seals the results. Only admins can overwrite the results of an execution with a another execution of an isabl app. For this, the admins must use the "- -force" argument when running the app through the CLI.
+To understand the current workflow, you first need to understand the problem that it tries to solve.
+The main problem the current workflow is trying to solve is single user ownership of all files in the Isabl data lake.
+For our team, that user is the unix shared user shahbot.
+
+Single user ownership would be a simple problem to solve if MSK allowed sudo privileges on the Juno cluster.
+Unfortunately, sudo is disabled and we are not able to run the command “chown”. As a result Elli's lab created
+the following workflow.
+
+In Isabl, any user with analyst privileges is able to run apps, and apps produce analyses. Each analysis has its own
+indexed directory in the Isabl data lake. When a user kicks off an application, the analysis directory in the
+data lake will be temporarily owned by the app running user, and shah group readable and writeable.
+
+**Workflow:**
+
+Isabl users with analyst permissions run apps that produce analyses. At this stage, the analyses directories will be
+owned by the running users, but also shah group readable and writeable. If successful, the analyses status will be
+set to the status “FINISHED”. Important to note, you are not able to view analyses results while they’re in
+“FINISHED” state.
+
+The ADMIN_USER, shahbot, runs a command called “isabl process-finished” which converts all analyses in “FINISHED”
+state to “SUCCEEDED” state. The conversion process includes the following:
+
+- Copying analyses directories so they are owned by the ADMIN_USER shahbot
+- Modifying permissions to only be group readable
+- Creating analyses results dictionary (i.e. results visible via UI)
+- Deleting the original user owned analyses directory
+
+**IMPORTANT!**
+
+The following must be ensured for the workflow to work properly:
+
+- export ISABL_API_URL= https://isabl.shahlab.mskcc.org/api/v1/ : Ensures that you are pointing to the production instance of Isabl
+- export ISABL_CLIENT_ID=1 : Setting this environment variable configures your Isabl client settings from the Isabl API. Key settings that get set are:
+      - ADMIN_USER is set to shahbot. This setting is crucial because this flag lets isabl_cli know to set the analyses to a “FINISHED” state. By no means should the running user set themselves as the admin. This will finalize the results under the ownership of the running user, which is something we do not want.
+      - BASE_STORAGE_URL = sets the path of the Isabl data lake on Juno.
+      - **Run apps from the Juno cluster.**
+
 
 
 7. **View data** (end-user)
