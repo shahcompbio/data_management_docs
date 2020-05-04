@@ -93,9 +93,8 @@
 <p>Check app.py documentation for each App. For example, see cellranger app</p>
 <p><a class="reference external" href="https://github.com/shahcompbio/isabl_apps/blob/master/isabl_apps/apps/shahcompbio/cellranger/app.py">https://github.com/shahcompbio/isabl_apps/blob/master/isabl_apps/apps/shahcompbio/cellranger/app.py</a></p>
 <p>To understand the current workflow, you first need to understand the problem that it tries to solve.
-The main problem the current workflow is trying to solve is single user ownership of all files in the Isabl data lake.
-For our team, that user is the unix shared user shahbot.</p>
-<p>Single user ownership would be a simple problem to solve if MSK allowed sudo privileges on the Juno cluster.
+The main problem the current workflow is trying to solve is single user ownership of all files in the Isabl data lake.</p>
+<p>Single user ownership would be a simple problem to solve if sudo privileges were allowed on the cluster.
 Unfortunately, sudo is disabled and we are not able to run the command “chown”. As a result Elli’s lab created
 the following workflow.</p>
 <p>In Isabl, any user with analyst privileges is able to run apps, and apps produce analyses. Each analysis has its own
@@ -103,13 +102,13 @@ indexed directory in the Isabl data lake. When a user kicks off an application, 
 data lake will be temporarily owned by the app running user, and shah group readable and writeable.</p>
 <p><strong>Workflow:</strong></p>
 <p>Isabl users with analyst permissions run apps that produce analyses. At this stage, the analyses directories will be
-owned by the running users, but also shah group readable and writeable. If successful, the analyses status will be
+owned by the running users, but also group readable and writeable. If successful, the analyses status will be
 set to the status “FINISHED”. Important to note, you are not able to view analyses results while they’re in
 “FINISHED” state.</p>
-<p>The ADMIN_USER, shahbot, runs a command called “isabl process-finished” which converts all analyses in “FINISHED”
+<p>The ADMIN_USER, runs a command called “isabl process-finished” which converts all analyses in “FINISHED”
 state to “SUCCEEDED” state. The conversion process includes the following:</p>
 <ul class="simple">
-<li><p>Copying analyses directories so they are owned by the ADMIN_USER shahbot</p></li>
+<li><p>Copying analyses directories so they are owned by the ADMIN_USER</p></li>
 <li><p>Modifying permissions to only be group readable</p></li>
 <li><p>Creating analyses results dictionary (i.e. results visible via UI)</p></li>
 <li><p>Deleting the original user owned analyses directory</p></li>
@@ -117,12 +116,12 @@ state to “SUCCEEDED” state. The conversion process includes the following:</
 <p><strong>IMPORTANT!</strong></p>
 <p>The following must be ensured for the workflow to work properly:</p>
 <ul class="simple">
-<li><p>export ISABL_API_URL= <a class="reference external" href="https://isabl.shahlab.mskcc.org/api/v1/">https://isabl.shahlab.mskcc.org/api/v1/</a> : Ensures that you are pointing to the production instance of Isabl</p></li>
+<li><p>export ISABL_API_URL= path to prod instance of isabl : Ensures that you are pointing to the production instance of Isabl</p></li>
 <li><dl class="simple">
-<dt>export ISABL_CLIENT_ID=1<span class="classifier">Setting this environment variable configures your Isabl client settings from the Isabl API. Key settings that get set are:</span></dt><dd><ul>
-<li><p>ADMIN_USER is set to shahbot. This setting is crucial because this flag lets isabl_cli know to set the analyses to a “FINISHED” state. By no means should the running user set themselves as the admin. This will finalize the results under the ownership of the running user, which is something we do not want.</p></li>
-<li><p>BASE_STORAGE_URL = sets the path of the Isabl data lake on Juno.</p></li>
-<li><p><strong>Run apps from the Juno cluster.</strong></p></li>
+<dt>export ISABL_CLIENT_ID= client id primary key<span class="classifier">Setting this environment variable configures your Isabl client settings from the Isabl API. Key settings that get set are:</span></dt><dd><ul>
+<li><p>ADMIN_USER is set. This setting is crucial because this flag lets isabl_cli know to set the analyses to a “FINISHED” state. By no means should the running user set themselves as the admin(unless they are the admin). This will finalize the results under the ownership of the running user, which is something we do not want.</p></li>
+<li><p>BASE_STORAGE_URL = sets the path of the Isabl data lake.</p></li>
+<li><p><strong>Run apps from the same file system that the datalake is on.</strong></p></li>
 </ul>
 </dd>
 </dl>

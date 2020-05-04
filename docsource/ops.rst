@@ -94,9 +94,8 @@ https://github.com/shahcompbio/isabl_apps/blob/master/isabl_apps/apps/shahcompbi
 
 To understand the current workflow, you first need to understand the problem that it tries to solve.
 The main problem the current workflow is trying to solve is single user ownership of all files in the Isabl data lake.
-For our team, that user is the unix shared user shahbot.
 
-Single user ownership would be a simple problem to solve if MSK allowed sudo privileges on the Juno cluster.
+Single user ownership would be a simple problem to solve if sudo privileges were allowed on the cluster.
 Unfortunately, sudo is disabled and we are not able to run the command “chown”. As a result Elli's lab created
 the following workflow.
 
@@ -107,14 +106,14 @@ data lake will be temporarily owned by the app running user, and shah group read
 **Workflow:**
 
 Isabl users with analyst permissions run apps that produce analyses. At this stage, the analyses directories will be
-owned by the running users, but also shah group readable and writeable. If successful, the analyses status will be
+owned by the running users, but also group readable and writeable. If successful, the analyses status will be
 set to the status “FINISHED”. Important to note, you are not able to view analyses results while they’re in
 “FINISHED” state.
 
-The ADMIN_USER, shahbot, runs a command called “isabl process-finished” which converts all analyses in “FINISHED”
+The ADMIN_USER, runs a command called “isabl process-finished” which converts all analyses in “FINISHED”
 state to “SUCCEEDED” state. The conversion process includes the following:
 
-- Copying analyses directories so they are owned by the ADMIN_USER shahbot
+- Copying analyses directories so they are owned by the ADMIN_USER
 - Modifying permissions to only be group readable
 - Creating analyses results dictionary (i.e. results visible via UI)
 - Deleting the original user owned analyses directory
@@ -123,11 +122,11 @@ state to “SUCCEEDED” state. The conversion process includes the following:
 
 The following must be ensured for the workflow to work properly:
 
-- export ISABL_API_URL= https://isabl.shahlab.mskcc.org/api/v1/ : Ensures that you are pointing to the production instance of Isabl
-- export ISABL_CLIENT_ID=1 : Setting this environment variable configures your Isabl client settings from the Isabl API. Key settings that get set are:
-      - ADMIN_USER is set to shahbot. This setting is crucial because this flag lets isabl_cli know to set the analyses to a “FINISHED” state. By no means should the running user set themselves as the admin. This will finalize the results under the ownership of the running user, which is something we do not want.
-      - BASE_STORAGE_URL = sets the path of the Isabl data lake on Juno.
-      - **Run apps from the Juno cluster.**
+- export ISABL_API_URL= path to prod instance of isabl : Ensures that you are pointing to the production instance of Isabl
+- export ISABL_CLIENT_ID= client id primary key : Setting this environment variable configures your Isabl client settings from the Isabl API. Key settings that get set are:
+      - ADMIN_USER is set. This setting is crucial because this flag lets isabl_cli know to set the analyses to a “FINISHED” state. By no means should the running user set themselves as the admin(unless they are the admin). This will finalize the results under the ownership of the running user, which is something we do not want.
+      - BASE_STORAGE_URL = sets the path of the Isabl data lake.
+      - **Run apps from the same file system that the datalake is on.**
 
 
 
