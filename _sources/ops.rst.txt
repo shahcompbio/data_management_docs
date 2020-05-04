@@ -101,7 +101,7 @@ the following workflow.
 
 In Isabl, any user with analyst privileges is able to run apps, and apps produce analyses. Each analysis has its own
 indexed directory in the Isabl data lake. When a user kicks off an application, the analysis directory in the
-data lake will be temporarily owned by the app running user, and shah group readable and writeable.
+data lake will be temporarily owned by the app running user, and group readable and writeable.
 
 **Workflow:**
 
@@ -122,10 +122,10 @@ state to “SUCCEEDED” state. The conversion process includes the following:
 
 The following must be ensured for the workflow to work properly:
 
-- export ISABL_API_URL= path to prod instance of isabl : Ensures that you are pointing to the production instance of Isabl
+- export ISABL_API_URL=https://<isabl_server_ip>/api/v1/ : Ensures that you are pointing to the production instance of Isabl
 - export ISABL_CLIENT_ID= client id primary key : Setting this environment variable configures your Isabl client settings from the Isabl API. Key settings that get set are:
       - ADMIN_USER is set. This setting is crucial because this flag lets isabl_cli know to set the analyses to a “FINISHED” state. By no means should the running user set themselves as the admin(unless they are the admin). This will finalize the results under the ownership of the running user, which is something we do not want.
-      - BASE_STORAGE_URL = sets the path of the Isabl data lake.
+      - BASE_STORAGE_URL = sets the path of the Isabl data lake on cluster.
       - **Run apps from the same file system that the datalake is on.**
 
 
