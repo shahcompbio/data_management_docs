@@ -7,11 +7,11 @@
     <title>5.2. Operations &#8212; Data Management 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="5.1. Performance Evaluation" href="performanceEvaluation.html" />
@@ -32,10 +32,10 @@
           <div class="body" role="main">
             
   <div class="section" id="operations">
-<h1>5.2. Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">5.2. </span>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h1>
 <p>This section contains a set of runbooks and workflows for various backend operations required by the system.</p>
 <div class="section" id="workflows">
-<h2>5.2.1. Workflows:<a class="headerlink" href="#workflows" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.2.1. </span>Workflows:<a class="headerlink" href="#workflows" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p><strong>Molecular Data</strong></p></li>
 </ol>
@@ -64,7 +64,7 @@
 </div>
 </div>
 <div class="section" id="routine-developer-operations">
-<h2>5.2.2. Routine Developer Operations:<a class="headerlink" href="#routine-developer-operations" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.2.2. </span>Routine Developer Operations:<a class="headerlink" href="#routine-developer-operations" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p><strong>Deployment</strong> (See section on Installation)</p></li>
 <li><p><strong>Set up a new project in isabl</strong></p></li>
@@ -136,14 +136,26 @@ state to “SUCCEEDED” state. The conversion process includes the following:</
 <p><a class="reference external" href="https://github.com/isabl-io/msk.git">https://github.com/isabl-io/msk.git</a> =&gt; <a class="reference external" href="https://github.com/shahcompbio/isabl_shahlab.git">https://github.com/shahcompbio/isabl_shahlab.git</a></p>
 <p><a class="reference external" href="https://github.com/isabl-io/api.git">https://github.com/isabl-io/api.git</a> =&gt; <a class="reference external" href="https://github.com/shahcompbio/isabl_api.git">https://github.com/shahcompbio/isabl_api.git</a></p>
 <p><a class="reference external" href="https://github.com/isabl-io/cli.git">https://github.com/isabl-io/cli.git</a> =&gt; <a class="reference external" href="https://github.com/shahcompbio/isabl_cli.git">https://github.com/shahcompbio/isabl_cli.git</a></p>
-<p>This must be done in the development environment. First merge changes from upstream into a branch on origin that is at the head of master, and then run unit tests. If there is no regression, proceed to the next step. Else, notify upstream team about regressions and repeat.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git fetch upstream master
+<p>This must be done in the development environment first to ensure there are no regressions. First merge changes from upstream into a branch on origin that is at the head of master (the commands below are set up to be in master itself and this should be changed in the next refinement of these steps), and then rebuild the docker image and run isabl_api unit tests. If there is no regression, proceed to the next step. Else, notify upstream team about regressions and repeat. Next, repeat the same steps for the cli after starting the api server to test against. If cli tests pass, push changes for both cli and api to origin branch on origin.</p>
+<p>Once changes have been pushed successfully to origin master for both api and cli, proceed to update production when no jobs are running against the server. Once update is complete, notify all users to update their cli to head of origin master.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git checkout master
+$ git fetch upstream master
 $ git merge upstream/master
 $ docker-compose build
 $ <span class="nb">echo</span> <span class="s2">&quot;isabl_api unit test command below&quot;</span>
 $ docker-compose run --rm --user root django pytest --ds example.settings --cov<span class="o">=</span>isabl_api
+$ docker-compose down
+$ docker-compose up
 $ <span class="nb">echo</span> <span class="s2">&quot;isabl_cli unit test command below&quot;</span>
+$ <span class="nb">cd</span> ../isabl_cli
+$ git checkout master
+$ git fetch upstream master
+$ git merge upstream/master
+$ <span class="nb">source</span> venv/bin/activate
+$ python setup.py install
 $ py.test tests/ --cov<span class="o">=</span>isabl_cli -s
+$ git push origin master
+$ <span class="nb">cd</span> ../isabl_api
 $ git push origin master
 </pre></div>
 </div>
@@ -282,8 +294,8 @@ python manage.py graph_models isabl_api -o docs/schema.pdf -e -d -E --pygraphviz
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="developerOperations.html">5. Developer Operations</a><ul>
-      <li>Previous: <a href="performanceEvaluation.html" title="previous chapter">5.1. Performance Evaluation</a></li>
+  <li><a href="developerOperations.html"><span class="section-number">5. </span>Developer Operations</a><ul>
+      <li>Previous: <a href="performanceEvaluation.html" title="previous chapter"><span class="section-number">5.1. </span>Performance Evaluation</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -297,7 +309,7 @@ python manage.py graph_models isabl_api -o docs/schema.pdf -e -d -E --pygraphviz
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -314,7 +326,7 @@ python manage.py graph_models isabl_api -o docs/schema.pdf -e -d -E --pygraphviz
       &copy;2019, Shah Lab, MSKCC.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

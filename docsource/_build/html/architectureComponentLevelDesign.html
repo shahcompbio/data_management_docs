@@ -7,11 +7,11 @@
     <title>4.4. Architecture - Component Level Design &#8212; Data Management 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="4.5. Formal Specs" href="formalSpecs.html" />
@@ -33,9 +33,9 @@
           <div class="body" role="main">
             
   <div class="section" id="architecture-component-level-design">
-<h1>4.4. Architecture - Component Level Design<a class="headerlink" href="#architecture-component-level-design" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">4.4. </span>Architecture - Component Level Design<a class="headerlink" href="#architecture-component-level-design" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="architecture-and-dependencies">
-<h2>4.4.1. Architecture and Dependencies:<a class="headerlink" href="#architecture-and-dependencies" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.4.1. </span>Architecture and Dependencies:<a class="headerlink" href="#architecture-and-dependencies" title="Permalink to this headline">¶</a></h2>
 <p>This section describes the components that make up the Isabl data lake sub-system that sits in the larger MSK system described in the section <a class="reference external" href="architectureSystemLevelDesign.html">Architecture - High Level Design</a>.</p>
 <div class="figure align-default" id="id1">
 <span id="fig-main"></span><img alt="_images/isablComponentLevel.png" src="_images/isablComponentLevel.png" />
@@ -49,7 +49,7 @@
 </ol>
 </div>
 <div class="section" id="design-features">
-<h2>4.4.2. Design Features:<a class="headerlink" href="#design-features" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.4.2. </span>Design Features:<a class="headerlink" href="#design-features" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>The system separates the data management concern (of data in the lake) from the analysis pipeline execution concern by providing a pluggable <strong>CLI</strong> through which analysis pipelines can be integrated into the system.</p></li>
 <li><p>The system also separates out the data query and visualization concerns through the egest components. The postgres database is only used to locate data in the lake and view summary statistics for the lake.</p></li>
@@ -110,9 +110,9 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="developer.html">4. Developer</a><ul>
-      <li>Previous: <a href="architectureSystemLevelDesign.html" title="previous chapter">4.3. Architecture - High Level Design</a></li>
-      <li>Next: <a href="formalSpecs.html" title="next chapter">4.5. Formal Specs</a></li>
+  <li><a href="developer.html"><span class="section-number">4. </span>Developer</a><ul>
+      <li>Previous: <a href="architectureSystemLevelDesign.html" title="previous chapter"><span class="section-number">4.3. </span>Architecture - High Level Design</a></li>
+      <li>Next: <a href="formalSpecs.html" title="next chapter"><span class="section-number">4.5. </span>Formal Specs</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -126,7 +126,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -143,7 +143,7 @@
       &copy;2019, Shah Lab, MSKCC.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
