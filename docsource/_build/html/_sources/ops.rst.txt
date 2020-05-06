@@ -122,11 +122,72 @@ state to “SUCCEEDED” state. The conversion process includes the following:
 
 The following must be ensured for the workflow to work properly:
 
-- export ISABL_API_URL=https://<isabl_server_ip>/api/v1/ : Ensures that you are pointing to the production instance of Isabl
-- export ISABL_CLIENT_ID= client id primary key : Setting this environment variable configures your Isabl client settings from the Isabl API. Key settings that get set are:
-      - ADMIN_USER is set. This setting is crucial because this flag lets isabl_cli know to set the analyses to a “FINISHED” state. By no means should the running user set themselves as the admin(unless they are the admin). This will finalize the results under the ownership of the running user, which is something we do not want.
-      - BASE_STORAGE_URL = sets the path of the Isabl data lake on cluster.
+- ``export ISABL_API_URL=https://<isabl_server_ip>/api/v1/``: Ensures that you are pointing to the production instance of Isabl
+- ``export ISABL_CLIENT_ID=client id primary key``: Setting this environment variable configures your Isabl client settings from the Isabl API. Key settings that get set are:
+      - ``ADMIN_USER`` is set. This setting is crucial because this flag lets isabl_cli know to set the analyses to a “FINISHED” state. By no means should the running user set themselves as the admin(unless they are the admin). This will finalize the results under the ownership of the running user, which is something we do not want.
+      - ``BASE_STORAGE_URL`` = sets the path of the Isabl data lake on cluster.
       - **Run apps from the same file system that the datalake is on.**
+
+**Analyses Batch Submit Setup (LSF)**
+
+Isabl has the ability to submit multiple analyses to the cluster with a single command. In order to get this
+functionality to work you must setup the following:
+
+- In your apps_repo/apps_repo/apps/, modify__init__.py to include your apps
+
+.. code-block:: python
+
+    from apps_repo.apps.some_app.apps import app1
+    from apps_repo.apps.some_app.apps import app2
+
+
+- In your apps_repo/apps_repo, modify lsf.py to include a method that sets job submission parameters per app. This step is crucial or your job will be submitted to the short queue and killed after a set amount of time.
+
+.. code-block:: python
+
+    LSF_RUNTIME_3_DAYS = 4320
+    LSF_RUNTIME_5_DAYS = 7200
+    LSF_CONTROL_QUEUE = "-q control"
+
+    def get_lsf_requirements(app, targets_methods):
+        queue = LSF_CONTROL_QUEUE
+        memory = 1
+        cores = 1
+        extra = None
+
+        if isinstance(app, apps.app1):
+            queue = LSF_CONTROL_QUEUE
+            runtime = LSF_RUNTIME_5_DAYS
+            cores = 2
+            memory = 10
+
+        if isinstance(app, apps.app2):
+            queue = LSF_CONTROL_QUEUE
+            runtime = LSF_RUNTIME_3_DAYS
+            cores = 2
+            memory = 10
+
+        extra = extra or ""
+        queue = queue or ""
+        return " ".join(
+            f"-n {cores} -W {runtime} -R 'rusage[mem={memory}]' {extra} {queue}".split()
+
+- Modify your clients model to include the following:
+
+.. code-block:: json
+
+    "SUBMIT_ANALYSES": "isabl_cli.batch_systems.submit_lsf",
+    "SUBMIT_CONFIGURATION": {
+        "get_requirements": "apps_repo.lsf.get_lsf_requirements" # this is the method from the step above
+    }
+
+**Note:** do not forget to export ``ISABL_CLIENT_ID=client id primary key`` for these settings to take effect.
+
+Examples of kicking off multiple analyses at once:
+
+.. code-block:: bash
+
+    isabl some-assembly app1 -fi projects 1 # 1 in this example is your projects primary key
 
 
 
