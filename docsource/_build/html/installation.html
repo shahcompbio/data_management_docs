@@ -7,11 +7,11 @@
     <title>4.7. Installation Instructions &#8212; Data Management 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="4.8. Configuration Details" href="configurationDetails.html" />
@@ -33,10 +33,10 @@
           <div class="body" role="main">
             
   <div class="section" id="installation-instructions">
-<h1>4.7. Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">4.7. </span>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
 <p>All installation instructions are for Ubuntu 16.04.</p>
 <div class="section" id="server-development-deployment-api">
-<h2>4.7.1. Server Development Deployment (API)<a class="headerlink" href="#server-development-deployment-api" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.7.1. </span>Server Development Deployment (API)<a class="headerlink" href="#server-development-deployment-api" title="Permalink to this headline">¶</a></h2>
 <p>You may wish to make a local server deployment if you are interested in developing and testing isabl apps.</p>
 <ol class="arabic simple">
 <li><p>Set up the following dependencies:</p></li>
@@ -152,7 +152,7 @@ $ docker-compose up
 </ol>
 </div>
 <div class="section" id="client-development-deployment-cli">
-<h2>4.7.2. Client Development Deployment (CLI)<a class="headerlink" href="#client-development-deployment-cli" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.7.2. </span>Client Development Deployment (CLI)<a class="headerlink" href="#client-development-deployment-cli" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Clone isabl_cli and shahlab_apps repos.</p></li>
 </ol>
@@ -289,7 +289,7 @@ $ py.test tests/ --cov<span class="o">=</span>isabl_shahlab_apps -s
 </div>
 </div>
 <div class="section" id="staging-deployment">
-<h2>4.7.3. Staging Deployment<a class="headerlink" href="#staging-deployment" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.7.3. </span>Staging Deployment<a class="headerlink" href="#staging-deployment" title="Permalink to this headline">¶</a></h2>
 <p>The staging environment is used to,</p>
 <div class="line-block">
 <div class="line">1. verify compatibility of the application code with the existing database, and to</div>
@@ -373,7 +373,7 @@ $ docker-compose -f production.yml up -d
 </div>
 </div>
 <div class="section" id="server-production-deployment-api">
-<h2>4.7.4. Server Production Deployment (API)<a class="headerlink" href="#server-production-deployment-api" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.7.4. </span>Server Production Deployment (API)<a class="headerlink" href="#server-production-deployment-api" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Create a VM with minumum 2 CPUs, 8 GB memory, 30 DB OS drive and a 255GB external data drive.</p></li>
 <li><p>Confgure the VM to use a static IP.</p></li>
@@ -417,20 +417,27 @@ $ <span class="nb">cd</span> isabl_shahlab
       <span class="na">- /backups:/backups</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo mkdir &lt;data_lake_path&gt;
-chown -R &lt;isabl_user&gt;:&lt;isabl_user&gt; &lt;data_lake_path&gt;
-yum install fuse-sshfs
-OR
-sudo apt-get update
-sudo apt-get install sshfs
-sshfs -o nonempty -o follow_symlinks -o <span class="nv">IdentityFile</span><span class="o">=</span>&lt;path_to_your_public_key&gt; -o allow_other &lt;user&gt;@&lt;remote_server&gt;:&lt;path_to_datalake&gt; &lt;path_to_datalake&gt;
-</pre></div>
-</div>
-<p>To unmount</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir /backups
-</pre></div>
-</div>
 <ol class="arabic simple" start="8">
+<li><p>Set up a sshfs mount to the cluster in order for the web application to view the results file using a non-root account.</p></li>
+</ol>
+<p>Note: Verify that you can first log into the cluster where the data lake resides.</p>
+<p>Note: Verify that the mount is viewable via root for isabl_api webapp.</p>
+<p>Note: If the sshfs remote mount command does not work use argument <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">debug,sshfs_debug,loglevel=debug</span></code> to debug</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo mkdir &lt;data_lake_path&gt;
+$ chown -R &lt;isabl_user&gt;:&lt;isabl_user&gt; &lt;data_lake_path&gt;
+$ yum install fuse-sshfs
+OR
+$ sudo apt-get update
+$ sudo apt-get install sshfs
+$
+$ <span class="nb">echo</span> <span class="s2">&quot;command below from non-root account will mount the remote mount&quot;</span>
+$ sshfs -o nonempty -o follow_symlinks -o <span class="nv">IdentityFile</span><span class="o">=</span>&lt;path_to_your_private_key&gt; -o allow_root &lt;user&gt;@&lt;remote_server&gt;:&lt;path_to_datalake&gt; &lt;path_to_datalake&gt;
+$
+$ <span class="nb">echo</span> <span class="s2">&quot;command below from non-root account will unmount the remote mount&quot;</span>
+$ fusermount -u &lt;data_lake_path&gt;
+</pre></div>
+</div>
+<ol class="arabic simple" start="9">
 <li><p>Install isabl API.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git submodule init
@@ -441,7 +448,7 @@ $ <span class="nb">cd</span> requirements/isabl_api
 $ git pull origin master
 </pre></div>
 </div>
-<ol class="arabic simple" start="9">
+<ol class="arabic simple" start="10">
 <li><p>Add “SHAH” as SYSTEM_ID_PREFIX in requirements/isabl_api/isabl_api/settings.py. The SYSTEM_ID_PREFIX will be added to all project system ids and will differentiate shahlab system ids from other lab system ids in the global scope.</p></li>
 <li><p>Generate TLS certificates.</p></li>
 </ol>
@@ -483,14 +490,14 @@ $ openssl rsa -noout -modulus -in &lt;server_name&gt;.key <span class="p">|</spa
 $ openssl req -noout -modulus -in &lt;server_name&gt;.csr <span class="p">|</span> openssl md5
 </pre></div>
 </div>
-<ol class="arabic simple" start="11">
+<ol class="arabic simple" start="12">
 <li><p>Add cert copy commands to compose/production/caddy/Dockerfile</p></li>
 </ol>
 <div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">cp ./compose/production/caddy/&lt;server_name&gt;.pem /etc/&lt;server_name&gt;.pem</span>
 <span class="na">cp ./compose/production/caddy/&lt;server_name&gt;.key /etc/&lt;server_name&gt;.key</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="12">
+<ol class="arabic simple" start="13">
 <li><p>Copy TLS certificate paths in the docker-container into caddy config file ./compose/production/caddyfile.</p></li>
 </ol>
 <div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">http://isabl.shahlab.mskcc.org {</span>
@@ -513,7 +520,7 @@ $ openssl req -noout -modulus -in &lt;server_name&gt;.csr <span class="p">|</spa
 <span class="na">}</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="13">
+<ol class="arabic simple" start="14">
 <li><p>In .envs/.production/.caddy add <cite>https://</cite> to DOMAIN_NAME. This is required to explicitly tell caddy to use https and 80/443 ports.</p></li>
 <li><p>Apply the mailgun integration. This is required for the proper functioning of the web application. See section on configuring the stack at <a class="reference external" href="https://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html">https://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html</a>.</p></li>
 </ol>
@@ -530,7 +537,7 @@ $ openssl req -noout -modulus -in &lt;server_name&gt;.csr <span class="p">|</spa
 <div class="line">15.4 Restart server. Once set up, the recipient will receive crash report emails each time django crashes</div>
 <div class="line">[TODO: add test for testing crash reports]</div>
 </div>
-<ol class="arabic simple" start="15">
+<ol class="arabic simple" start="16">
 <li><p>In isabl_shahlab/templates/frontend.html, hardcode version number of frontend. The version can be obtained from <a class="reference external" href="https://github.com/isabl-io/web/blob/master/package.json">https://github.com/isabl-io/web/blob/master/package.json</a></p></li>
 </ol>
 <div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="na">&lt;script src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/vue&quot;&gt;&lt;/script&gt;</span>
@@ -582,7 +589,7 @@ $ docker-compose -f production.yml up
 </div>
 </div>
 <div class="section" id="client-production-deployment-cli">
-<h2>4.7.5. Client Production Deployment (CLI)<a class="headerlink" href="#client-production-deployment-cli" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">4.7.5. </span>Client Production Deployment (CLI)<a class="headerlink" href="#client-production-deployment-cli" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Clone isabl_cli and shahlab_apps repos. If you plan to execute isabl apps, you will need to install the CLI on Juno,  (where the data lake resides). Or, you may wish to remote mount the juno data lake directory if you wish to work with the CLI on your local machine.</p></li>
 </ol>
@@ -754,9 +761,9 @@ $ python setup.py install
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="developer.html">4. Developer</a><ul>
-      <li>Previous: <a href="systemRequirements.html" title="previous chapter">4.6. System Requirements</a></li>
-      <li>Next: <a href="configurationDetails.html" title="next chapter">4.8. Configuration Details</a></li>
+  <li><a href="developer.html"><span class="section-number">4. </span>Developer</a><ul>
+      <li>Previous: <a href="systemRequirements.html" title="previous chapter"><span class="section-number">4.6. </span>System Requirements</a></li>
+      <li>Next: <a href="configurationDetails.html" title="next chapter"><span class="section-number">4.8. </span>Configuration Details</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -770,7 +777,7 @@ $ python setup.py install
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -787,7 +794,7 @@ $ python setup.py install
       &copy;2019, Shah Lab, MSKCC.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

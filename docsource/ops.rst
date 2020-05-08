@@ -172,14 +172,17 @@ functionality to work you must setup the following:
         return " ".join(
             f"-n {cores} -W {runtime} -R 'rusage[mem={memory}]' {extra} {queue}".split()
 
-- Modify your clients model to include the following:
+- Modify your clients model to include the following configuration. 
 
-.. code-block:: json
 
+.. code-block:: JSON
+
+  {
     "SUBMIT_ANALYSES": "isabl_cli.batch_systems.submit_lsf",
     "SUBMIT_CONFIGURATION": {
-        "get_requirements": "apps_repo.lsf.get_lsf_requirements" # this is the method from the step above
-    }
+        "get_requirements": "apps_repo.lsf.get_lsf_requirements"
+  }
+
 
 **Note:** do not forget to export ``ISABL_CLIENT_ID=client id primary key`` for these settings to take effect.
 
@@ -215,7 +218,7 @@ Examples of kicking off multiple analyses at once:
 
     This must be done in the development environment first to ensure there are no regressions. First merge changes from upstream into a branch on origin that is at the head of master (the commands below are set up to be in master itself and this should be changed in the next refinement of these steps), and then rebuild the docker image and run isabl_api unit tests. If there is no regression, proceed to the next step. Else, notify upstream team about regressions and repeat. Next, repeat the same steps for the cli after starting the api server to test against. If cli tests pass, push changes for both cli and api to origin branch on origin.
 
-    Once changes have been pushed successfully to origin master for both api and cli, proceed to update production when no jobs are running against the server. Once update is complete, notify all users to update their cli to head of origin master. 
+    Once changes have been pushed successfully to origin master for both api and cli, proceed to update production when no jobs are running against the server. Once update is complete, notify all users to update their cli to head of origin master.
 
     .. code-block:: bash
 

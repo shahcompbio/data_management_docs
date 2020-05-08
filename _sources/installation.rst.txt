@@ -452,30 +452,35 @@ For postgres, it is necessary to bind mount the host backups dir so backups can 
                 - production_postgres_data:/var/lib/postgresql/data
                 - /backups:/backups
 
+8. Set up a sshfs mount to the cluster in order for the web application to view the results file using a non-root account.
+
+Note: Verify that you can first log into the cluster where the data lake resides.
+
+Note: Verify that the mount is viewable via root for isabl_api webapp.
+
+Note: If the sshfs remote mount command does not work use argument ``-o debug,sshfs_debug,loglevel=debug`` to debug
+
 
 .. code-block:: bash
 
-        sudo mkdir <data_lake_path>
-        chown -R <isabl_user>:<isabl_user> <data_lake_path>
-        yum install fuse-sshfs
+        $ sudo mkdir <data_lake_path>
+        $ chown -R <isabl_user>:<isabl_user> <data_lake_path>
+        $ yum install fuse-sshfs
         OR
-        sudo apt-get update
-        sudo apt-get install sshfs
-        sshfs -o nonempty -o follow_symlinks -o IdentityFile=<path_to_your_public_key> -o allow_other <user>@<remote_server>:<path_to_datalake> <path_to_datalake>
-
-To unmount
+        $ sudo apt-get update
+        $ sudo apt-get install sshfs
+        $
+        $ echo "command below from non-root account will mount the remote mount"
+        $ sshfs -o nonempty -o follow_symlinks -o IdentityFile=<path_to_your_private_key> -o allow_root <user>@<remote_server>:<path_to_datalake> <path_to_datalake>
+        $
+        $ echo "command below from non-root account will unmount the remote mount"
+        $ fusermount -u <data_lake_path>
 
 .. code-block: bash
 
-        fusermount -u <data_lake_path>
 
 
-.. code-block:: bash
-
-    $ mkdir /backups
-
-
-8. Install isabl API.
+9. Install isabl API.
 
 
 .. code-block:: bash
@@ -488,10 +493,10 @@ To unmount
     $ git pull origin master
 
 
-9. Add “SHAH” as SYSTEM_ID_PREFIX in requirements/isabl_api/isabl_api/settings.py. The SYSTEM_ID_PREFIX will be added to all project system ids and will differentiate shahlab system ids from other lab system ids in the global scope.
+10. Add “SHAH” as SYSTEM_ID_PREFIX in requirements/isabl_api/isabl_api/settings.py. The SYSTEM_ID_PREFIX will be added to all project system ids and will differentiate shahlab system ids from other lab system ids in the global scope.
 
 
-10. Generate TLS certificates.
+11. Generate TLS certificates.
 
 Create a config file for the CSR called req.conf with the following fields. Edit only the fields whose values are encased in `<>`. For CN, provide an A NAME, also called a glue record. But a C NAME should also work. For <alternate_server_name> provide C NAMES, if any. Note that this configuration includes "Subject Alternate Name" or SAN. This is a required field for Chrome and Firefox browsers.
 
@@ -543,7 +548,7 @@ Check the MD5 hashes of the <server_name>.csr, <server_name>.pem and <server_nam
     $ openssl req -noout -modulus -in <server_name>.csr | openssl md5
 
 
-11. Add cert copy commands to compose/production/caddy/Dockerfile
+12. Add cert copy commands to compose/production/caddy/Dockerfile
 
 
 .. code-block:: cfg
@@ -552,7 +557,7 @@ Check the MD5 hashes of the <server_name>.csr, <server_name>.pem and <server_nam
     cp ./compose/production/caddy/<server_name>.key /etc/<server_name>.key
 
 
-12. Copy TLS certificate paths in the docker-container into caddy config file ./compose/production/caddyfile.
+13. Copy TLS certificate paths in the docker-container into caddy config file ./compose/production/caddyfile.
 
 
 .. code-block:: cfg
@@ -577,10 +582,10 @@ Check the MD5 hashes of the <server_name>.csr, <server_name>.pem and <server_nam
             }
 
 
-13. In .envs/.production/.caddy add `https://` to DOMAIN_NAME. This is required to explicitly tell caddy to use https and 80/443 ports.
+14. In .envs/.production/.caddy add `https://` to DOMAIN_NAME. This is required to explicitly tell caddy to use https and 80/443 ports.
 
 
-14. Apply the mailgun integration. This is required for the proper functioning of the web application. See section on configuring the stack at https://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html.
+15. Apply the mailgun integration. This is required for the proper functioning of the web application. See section on configuring the stack at https://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html.
 
 |    15.1 Disable MAILGUN config
 |    15.2 grep for and comment out all "send_mail" method calls
@@ -595,7 +600,7 @@ OR
 |    [TODO: add test for testing crash reports]
 
 
-15. In isabl_shahlab/templates/frontend.html, hardcode version number of frontend. The version can be obtained from https://github.com/isabl-io/web/blob/master/package.json
+16. In isabl_shahlab/templates/frontend.html, hardcode version number of frontend. The version can be obtained from https://github.com/isabl-io/web/blob/master/package.json
 
 
 .. code-block:: cfg

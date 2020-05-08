@@ -7,11 +7,11 @@
     <title>4.9. Isabl Application Development &#8212; Data Management 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="4.10. Maintenance" href="maintenance.html" />
@@ -33,7 +33,7 @@
           <div class="body" role="main">
             
   <div class="section" id="isabl-application-development">
-<h1>4.9. Isabl Application Development<a class="headerlink" href="#isabl-application-development" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">4.9. </span>Isabl Application Development<a class="headerlink" href="#isabl-application-development" title="Permalink to this headline">¶</a></h1>
 <p>Things to keep in mind when developing apps -</p>
 <p>Data is imported into the experiments directory of the data lake. This directory has group read permissions (drwxr-x—). i.e. Only admins can import data into the data lake. Developers who write data importers should not attempt to alter the umask of the experiment directory to include group write permissions.</p>
 <p>Applications can write results to the analysis directory that isabl creates for the application. Applications must only write to this directory.</p>
@@ -95,9 +95,9 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="developer.html">4. Developer</a><ul>
-      <li>Previous: <a href="configurationDetails.html" title="previous chapter">4.8. Configuration Details</a></li>
-      <li>Next: <a href="maintenance.html" title="next chapter">4.10. Maintenance</a></li>
+  <li><a href="developer.html"><span class="section-number">4. </span>Developer</a><ul>
+      <li>Previous: <a href="configurationDetails.html" title="previous chapter"><span class="section-number">4.8. </span>Configuration Details</a></li>
+      <li>Next: <a href="maintenance.html" title="next chapter"><span class="section-number">4.10. </span>Maintenance</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -111,7 +111,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -128,7 +128,7 @@
       &copy;2019, Shah Lab, MSKCC.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
