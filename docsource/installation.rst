@@ -456,7 +456,7 @@ For postgres, it is necessary to bind mount the host backups dir so backups can 
 
 Note: Verify that you can first log into the cluster where the data lake resides.
 
-Note: Verify that the mount is viewable via root for isabl_api webapp.
+Note: Verify that the mount is viewable via user account that's running isabl_api webapp and via the docker container ``docker-compose -f production.yml django ash``.
 
 Note: If the sshfs remote mount command does not work use argument ``-o debug,sshfs_debug,loglevel=debug`` to debug
 
@@ -471,7 +471,7 @@ Note: If the sshfs remote mount command does not work use argument ``-o debug,ss
         $ sudo apt-get install sshfs
         $
         $ echo "command below from non-root account will mount the remote mount"
-        $ sshfs -o nonempty -o follow_symlinks -o IdentityFile=<path_to_your_private_key> -o allow_root <user>@<remote_server>:<path_to_datalake> <path_to_datalake>
+        $ sshfs -o nonempty -o follow_symlinks -o IdentityFile="<path_to_your_private_key>" -o allow_other <user>@<remote_server>:<path_to_datalake> <path_to_datalake>
         $
         $ echo "command below from non-root account will unmount the remote mount"
         $ fusermount -u <data_lake_path>

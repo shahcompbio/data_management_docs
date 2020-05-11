@@ -421,7 +421,7 @@ $ <span class="nb">cd</span> isabl_shahlab
 <li><p>Set up a sshfs mount to the cluster in order for the web application to view the results file using a non-root account.</p></li>
 </ol>
 <p>Note: Verify that you can first log into the cluster where the data lake resides.</p>
-<p>Note: Verify that the mount is viewable via root for isabl_api webapp.</p>
+<p>Note: Verify that the mount is viewable via user account that’s running isabl_api webapp and via the docker container <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">-f</span> <span class="pre">production.yml</span> <span class="pre">django</span> <span class="pre">ash</span></code>.</p>
 <p>Note: If the sshfs remote mount command does not work use argument <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">debug,sshfs_debug,loglevel=debug</span></code> to debug</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo mkdir &lt;data_lake_path&gt;
 $ chown -R &lt;isabl_user&gt;:&lt;isabl_user&gt; &lt;data_lake_path&gt;
@@ -431,7 +431,7 @@ $ sudo apt-get update
 $ sudo apt-get install sshfs
 $
 $ <span class="nb">echo</span> <span class="s2">&quot;command below from non-root account will mount the remote mount&quot;</span>
-$ sshfs -o nonempty -o follow_symlinks -o <span class="nv">IdentityFile</span><span class="o">=</span>&lt;path_to_your_private_key&gt; -o allow_root &lt;user&gt;@&lt;remote_server&gt;:&lt;path_to_datalake&gt; &lt;path_to_datalake&gt;
+$ sshfs -o nonempty -o follow_symlinks -o <span class="nv">IdentityFile</span><span class="o">=</span><span class="s2">&quot;&lt;path_to_your_private_key&gt;&quot;</span> -o allow_other &lt;user&gt;@&lt;remote_server&gt;:&lt;path_to_datalake&gt; &lt;path_to_datalake&gt;
 $
 $ <span class="nb">echo</span> <span class="s2">&quot;command below from non-root account will unmount the remote mount&quot;</span>
 $ fusermount -u &lt;data_lake_path&gt;

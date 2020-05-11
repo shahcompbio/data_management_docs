@@ -172,7 +172,7 @@ functionality to work you must setup the following:
         return " ".join(
             f"-n {cores} -W {runtime} -R 'rusage[mem={memory}]' {extra} {queue}".split()
 
-- Modify your clients model to include the following configuration. 
+- Modify your clients model to include the following configuration.
 
 
 .. code-block:: JSON
