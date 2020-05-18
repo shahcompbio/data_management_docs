@@ -390,6 +390,43 @@ The following steps may be used to deploy the production database to a staging e
     $ docker-compose down
     $ docker-compose -f production.yml up -d
 
+|
+
+**Alternative Method to Load Local/Dev Isabl instance w/ Prod data**
+
+When starting up a local instance of Isabl to play/test with, the most annoying part is filling it up with dummy data.
+To get around this we simply restore a copy of our prod database on our local instance as follows:
+
+1) Copy a database backup somewhere on your local machine.
+
+2) Copy the database backup from your local machine into the postgres container.
+
+.. code-block:: bash
+
+    docker cp /path/to/local/backup/<SOME BACK UP>.sql.gz <POSTGRES CONTAINER ID>:/tmp
+
+3) Stop all containers except for postgres. To get container IDs run ``docker ps``
+
+.. code-block:: bash
+
+    docker stop <CONTAINER ID> <ANOTHER CONTAINER ID> ...
+
+4) Restore prod back in dev.
+
+.. code-block:: bash
+
+    dropdb -U postgres "postgres"
+    createdb -U postgres postgres
+    gunzip -c "/tmp/<SOME BACK UP>.sgl.gz" | psql -U postgres "postgres"
+    exit #  exit container
+
+5) Stop all containers, bring them back up and verify migrations.
+
+.. code-block:: bash
+
+    docker-compose stop
+    docker-compose up -d
+    docker-compose run django python manage.py showmigrations
 
 Server Production Deployment (API)
 ----------------------------------
