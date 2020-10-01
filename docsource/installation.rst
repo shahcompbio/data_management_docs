@@ -515,7 +515,14 @@ Note: If the sshfs remote mount command does not work use argument ``-o debug,ss
 
 .. code-block: bash
 
+IMPORTANT: After mounting with sshfs , make sure to take isabl down and bring it back up or the files won't load.
 
+.. code-block:: bash
+
+        $ docker-compose -f production.yml down
+        $ docker-compose -f production.yml up -d
+
+.. code-block: bash
 
 9. Install isabl API.
 

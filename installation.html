@@ -473,6 +473,11 @@ $ <span class="nb">echo</span> <span class="s2">&quot;command below from non-roo
 $ fusermount -u &lt;data_lake_path&gt;
 </pre></div>
 </div>
+<p>IMPORTANT: After mounting with sshfs , make sure to take isabl down and bring it back up or the files won’t load.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker-compose -f production.yml down
+$ docker-compose -f production.yml up -d
+</pre></div>
+</div>
 <ol class="arabic simple" start="9">
 <li><p>Install isabl API.</p></li>
 </ol>
